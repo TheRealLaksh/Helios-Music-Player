@@ -33,9 +33,9 @@ const songs = [
     { name: '3peg', displayName: '3 Peg', artist: 'Sharry Mann', cover: '3peg' },
     { name: '945', displayName: '9:45', artist: 'Prabh Singh, Jay Trak, Rooh Sandhu', cover: '945' },
     { name: 'admirinyou', displayName: 'Admirin\' You', artist: 'Karan Aujla', cover: 'admirinyou' },
-    { name: 'baawe', displayName: 'Baawe', artist: 'AP Dhillon', cover: 'baawe' },
+    { name: 'baawe', displayName: 'Baawe', artist: 'Samay Raina, Raftaar, AP Dhillon', cover: 'baawe' },
     { name: 'band4band', displayName: 'Band4Band', artist: 'Central Cee & Lil Baby', cover: 'band4band' },
-    { name: 'bemine', displayName: 'Be Mine', artist: 'AP Dhillon', cover: 'bemine' },
+    { name: 'bemine', displayName: 'Be Mine', artist: 'Shubh', cover: 'bemine' },
     { name: 'daaku', displayName: 'Daaku', artist: 'Badshah, Sharvi Yadav, Hiten', cover: 'daaku' },
     { name: 'darji', displayName: 'Darji', artist: 'Prabh Singh & Rooh Sandhu', cover: 'darji' },
     { name: 'doja', displayName: 'Doja', artist: 'Central Cee', cover: 'doja' },
@@ -45,7 +45,6 @@ const songs = [
     { name: 'farebi', displayName: 'Farebi', artist: 'Chaar Diwaari & Raftaar', cover: 'farebi' },
     { name: 'followyou', displayName: 'Follow You', artist: 'Imagine Dragons', cover: 'followyou' },
     { name: 'ghost', displayName: 'Ghost', artist: 'Justin Bieber', cover: 'ghost' },
-    { name: 'goddamn', displayName: 'God Damn', artist: 'Badshah, Karan Aujla, Hiten', cover: 'goddamn' },
     { name: 'godsplan', displayName: 'God\'s Plan', artist: 'Drake', cover: 'godsplan' },
     { name: 'hometownsmile', displayName: 'Hometown Smile', artist: 'Bahjat', cover: 'hometownsmile' },
     { name: 'howlong', displayName: 'How Long', artist: 'Charlie Puth', cover: 'howlong' },
@@ -90,7 +89,6 @@ const colorPresets = [
     { aurora: ['#ff4b1f', '#1fddff'], vinyl: ['#ff4b1f', '#222'], vortex: 0xff4b1f }, // farebi
     { aurora: ['#000428', '#004e92'], vinyl: ['#004e92', '#222'], vortex: 0x004e92 }, // followyou
     { aurora: ['#f7ff00', '#db36a4'], vinyl: ['#f7ff00', '#444'], vortex: 0xf7ff00 }, // ghost
-    { aurora: ['#FF8008', '#FFC837'], vinyl: ['#FF8008', '#333'], vortex: 0xFF8008 }, // goddamn
     { aurora: ['#8E2DE2', '#4A00E0'], vinyl: ['#8E2DE2', '#333'], vortex: 0x8E2DE2 }, // godsplan
     { aurora: ['#fceabb', '#f8b500'], vinyl: ['#f8b500', '#444'], vortex: 0xf8b500 }, // hometownsmile
     { aurora: ['#2980b9', '#6dd5fa'], vinyl: ['#6dd5fa', '#2980b9'], vortex: 0x6dd5fa }, // howlong
