@@ -134,6 +134,7 @@ function loadSong(song) {
     audio.src = `assets/music/${song.name}.mp3`;
     albumArt.src = `assets/images/${song.cover}.jpg`;
     updateActiveBackground();
+    highlightCurrentSong(); // ADD THIS LINE
 }
 
 function playSong() {
@@ -183,8 +184,31 @@ function setProgress(e) { const w = this.clientWidth; const cX = e.offsetX; cons
 
 function setVolume() { audio.volume = volumeSlider.value; }
 
-function generatePlaylist() { songs.forEach((song, i) => { const li = document.createElement('li'); li.textContent = `${song.displayName} - ${song.artist}`; li.addEventListener('click', () => { songIndex = i; loadSong(songs[songIndex]); playSong(); }); playlistEl.appendChild(li); }); }
+function generatePlaylist() {
+    playlistEl.innerHTML = ''; // Clear existing playlist
+    songs.forEach((song, i) => { 
+        const li = document.createElement('li'); 
+        li.textContent = `${song.displayName} - ${song.artist}`; 
+        li.setAttribute('data-index', i); // ADD THIS LINE
+        li.addEventListener('click', () => { 
+            songIndex = i; 
+            loadSong(songs[songIndex]); 
+            playSong(); 
+        }); 
+        playlistEl.appendChild(li); 
+    }); 
+}
 
+function highlightCurrentSong() {
+    const playlistItems = document.querySelectorAll('#playlist li');
+    playlistItems.forEach(item => {
+        item.classList.remove('playing');
+    });
+    const currentSongItem = document.querySelector(`#playlist li[data-index='${songIndex}']`);
+    if (currentSongItem) {
+        currentSongItem.classList.add('playing');
+    }
+}
 function togglePlaylist() { settingsPanel.classList.remove('show'); playlistPanel.classList.toggle('show'); }
 
 function toggleSettingsPanel() { playlistPanel.classList.remove('show'); settingsPanel.classList.toggle('show'); }
