@@ -29,38 +29,92 @@ const auroraBg = document.getElementById('aurora-bg');
 const vinylBg = document.getElementById('vinyl-bg');
 const vortexCanvas = document.getElementById('vortex-canvas');
 
-// --- Playlist ---
 const songs = [
+    { name: '3peg', displayName: '3 Peg', artist: 'Sharry Mann', cover: '3peg' },
+    { name: '945', displayName: '9:45', artist: 'Prabh Singh, Jay Trak, Rooh Sandhu', cover: '945' },
+    { name: 'admirinyou', displayName: 'Admirin\' You', artist: 'Karan Aujla', cover: 'admirinyou' },
+    { name: 'baawe', displayName: 'Baawe', artist: 'AP Dhillon', cover: 'baawe' },
     { name: 'band4band', displayName: 'Band4Band', artist: 'Central Cee & Lil Baby', cover: 'band4band' },
+    { name: 'bemine', displayName: 'Be Mine', artist: 'AP Dhillon', cover: 'bemine' },
+    { name: 'daaku', displayName: 'Daaku', artist: 'Badshah, Sharvi Yadav, Hiten', cover: 'daaku' },
     { name: 'darji', displayName: 'Darji', artist: 'Prabh Singh & Rooh Sandhu', cover: 'darji' },
     { name: 'doja', displayName: 'Doja', artist: 'Central Cee', cover: 'doja' },
     { name: 'donteventext', displayName: 'Don\'t Even Text', artist: 'Tsumyoki & Ginni', cover: 'donteventext' },
     { name: 'dtmf', displayName: 'DTMF', artist: 'Bad Bunny', cover: 'dtmf' },
+    { name: 'excuses', displayName: 'Excuses', artist: 'AP Dhillon, Gurinder Gill', cover: 'excuses' },
     { name: 'farebi', displayName: 'Farebi', artist: 'Chaar Diwaari & Raftaar', cover: 'farebi' },
+    { name: 'followyou', displayName: 'Follow You', artist: 'Imagine Dragons', cover: 'followyou' },
+    { name: 'ghost', displayName: 'Ghost', artist: 'Justin Bieber', cover: 'ghost' },
+    { name: 'goddamn', displayName: 'God Damn', artist: 'Badshah, Karan Aujla, Hiten', cover: 'goddamn' },
     { name: 'godsplan', displayName: 'God\'s Plan', artist: 'Drake', cover: 'godsplan' },
+    { name: 'hometownsmile', displayName: 'Hometown Smile', artist: 'Bahjat', cover: 'hometownsmile' },
+    { name: 'howlong', displayName: 'How Long', artist: 'Charlie Puth', cover: 'howlong' },
+    { name: 'loveya', displayName: 'Love Ya', artist: 'Karan Aujla', cover: 'loveya' },
+    { name: 'magic', displayName: 'Magic', artist: 'AP Dhillon', cover: 'magic' },
+    { name: 'mexico', displayName: 'Mexico', artist: 'Shotgun Willy', cover: 'mexico' },
+    { name: 'millionaire', displayName: 'Millionaire', artist: 'Yo Yo Honey Singh, Simar Kaur', cover: 'millionaire' },
+    { name: 'numb', displayName: 'Numb', artist: 'Marshmello', cover: 'numb' },
+    { name: 'obsessed', displayName: 'Obsessed', artist: 'Riar Saab, Abhijay Sharma', cover: 'obsessed' },
+    { name: 'oldmoney', displayName: 'Old Money', artist: 'Karan Aujla', cover: 'oldmoney' },
     { name: 'ordinary', displayName: 'Ordinary', artist: 'Alex Warren', cover: 'ordinary' },
     { name: 'paro', displayName: 'Paro', artist: 'Aditya Rikhari', cover: 'paro' },
+    { name: 'run', displayName: 'Run', artist: 'OneRepublic', cover: 'run' },
+    { name: 'selflove', displayName: 'Self Love', artist: 'Metro Boomin, Coi Leray', cover: 'selflove' },
+    { name: 'somethingjustlikethis', displayName: 'Something Just Like This', artist: 'The Chainsmokers & Coldplay', cover: 'somethingjustlikethis' },
     { name: 'sprinter', displayName: 'Sprinter', artist: 'Dave & Central Cee', cover: 'sprinter' },
+    { name: 'stfu', displayName: 'STFU', artist: 'Karan Aujla', cover: 'stfu' },
     { name: 'thodisidaaru', displayName: 'Thodi Si Daaru', artist: 'AP Dhillon & Shreya Ghoshal', cover: 'thodisidaaru' },
     { name: 'thriftshop', displayName: 'Thrift Shop', artist: 'Macklemore & Ryan Lewis', cover: 'thriftshop' },
+    { name: 'toxic', displayName: 'Toxic', artist: 'AP Dhillon, Gurinder Gill', cover: 'toxic' },
+    { name: 'truestories', displayName: 'True Stories', artist: 'AP Dhillon, Gurinder Gill', cover: 'truestories' },
+    { name: 'uddaapunjab', displayName: 'Ud Daa Punjab', artist: 'Diljit Dosanjh', cover: 'uddaapunjab' },
     { name: 'whichone', displayName: 'Which One', artist: 'Drake & Central Cee', cover: 'whichone' },
+    { name: 'withyou', displayName: 'With You', artist: 'AP Dhillon', cover: 'withyou' },
     { name: 'youngblood', displayName: 'Youngblood', artist: '5 Seconds of Summer', cover: 'youngblood' }
 ];
-// --- Color Presets for Backgrounds ---
+
+// --- Color Presets (UPDATED with new colors) ---
 const colorPresets = [
+    { aurora: ['#f2994a', '#f2c94c'], vinyl: ['#f2994a', '#333'], vortex: 0xf2994a }, // 3peg
+    { aurora: ['#00c6ff', '#0072ff'], vinyl: ['#00c6ff', '#222'], vortex: 0x00c6ff }, // 945
+    { aurora: ['#ED213A', '#93291E'], vinyl: ['#ED213A', '#444'], vortex: 0xED213A }, // admirin'you
+    { aurora: ['#B24592', '#F15F79'], vinyl: ['#B24592', '#333'], vortex: 0xB24592 }, // baawe
     { aurora: ['#2c3e50', '#fd746c'], vinyl: ['#fd746c', '#2c3e50'], vortex: 0xfd746c }, // band4band
+    { aurora: ['#ffdde1', '#ee9ca7'], vinyl: ['#ee9ca7', '#444'], vortex: 0xee9ca7 }, // be mine
+    { aurora: ['#141E30', '#243B55'], vinyl: ['#243B55', '#141E30'], vortex: 0x243B55 }, // daaku
     { aurora: ['#00C9FF', '#92FE9D'], vinyl: ['#00C9FF', '#282828'], vortex: 0x00C9FF }, // darji
     { aurora: ['#e96443', '#904e95'], vinyl: ['#e96443', '#333'], vortex: 0xe96443 }, // doja
     { aurora: ['#F7971E', '#FFD200'], vinyl: ['#F7971E', '#444'], vortex: 0xF7971E }, // donteventext
     { aurora: ['#1c92d2', '#f2fcfe'], vinyl: ['#1c92d2', '#333'], vortex: 0x1c92d2 }, // dtmf
+    { aurora: ['#DA4453', '#89216B'], vinyl: ['#DA4453', '#222'], vortex: 0xDA4453 }, // excuses
     { aurora: ['#ff4b1f', '#1fddff'], vinyl: ['#ff4b1f', '#222'], vortex: 0xff4b1f }, // farebi
+    { aurora: ['#000428', '#004e92'], vinyl: ['#004e92', '#222'], vortex: 0x004e92 }, // followyou
+    { aurora: ['#f7ff00', '#db36a4'], vinyl: ['#f7ff00', '#444'], vortex: 0xf7ff00 }, // ghost
+    { aurora: ['#FF8008', '#FFC837'], vinyl: ['#FF8008', '#333'], vortex: 0xFF8008 }, // goddamn
     { aurora: ['#8E2DE2', '#4A00E0'], vinyl: ['#8E2DE2', '#333'], vortex: 0x8E2DE2 }, // godsplan
+    { aurora: ['#fceabb', '#f8b500'], vinyl: ['#f8b500', '#444'], vortex: 0xf8b500 }, // hometownsmile
+    { aurora: ['#2980b9', '#6dd5fa'], vinyl: ['#6dd5fa', '#2980b9'], vortex: 0x6dd5fa }, // howlong
+    { aurora: ['#E55D87', '#5FC3E4'], vinyl: ['#E55D87', '#444'], vortex: 0xE55D87 }, // loveya
+    { aurora: ['#5614B0', '#DBD65C'], vinyl: ['#5614B0', '#222'], vortex: 0x5614B0 }, // magic
+    { aurora: ['#16A085', '#F4D03F'], vinyl: ['#16A085', '#222'], vortex: 0x16A085 }, // mexico
+    { aurora: ['#D4AF37', '#B59410'], vinyl: ['#D4AF37', '#444'], vortex: 0xD4AF37 }, // millionaire
+    { aurora: ['#3a7bd5', '#3a6073'], vinyl: ['#3a7bd5', '#222'], vortex: 0x3a7bd5 }, // numb
+    { aurora: ['#C02425', '#F0CB35'], vinyl: ['#C02425', '#333'], vortex: 0xC02425 }, // obsessed
+    { aurora: ['#43C6AC', '#F8FFAE'], vinyl: ['#43C6AC', '#222'], vortex: 0x43C6AC }, // oldmoney
     { aurora: ['#a1c4fd', '#c2e9fb'], vinyl: ['#a1c4fd', '#444'], vortex: 0xa1c4fd }, // ordinary
     { aurora: ['#1D2B64', '#F8CDDA'], vinyl: ['#F8CDDA', '#1D2B64'], vortex: 0xF8CDDA }, // paro
+    { aurora: ['#ff9966', '#ff5e62'], vinyl: ['#ff9966', '#333'], vortex: 0xff9966 }, // run
+    { aurora: ['#e52d27', '#b31217'], vinyl: ['#e52d27', '#222'], vortex: 0xe52d27 }, // selflove
+    { aurora: ['#2948ff', '#ff66c4'], vinyl: ['#2948ff', '#222'], vortex: 0x2948ff }, // somethingjustlikethis
     { aurora: ['#007991', '#78ffd6'], vinyl: ['#007991', '#222'], vortex: 0x007991 }, // sprinter
+    { aurora: ['#932214', '#C33764'], vinyl: ['#932214', '#222'], vortex: 0x932214 }, // stfu
     { aurora: ['#cb2d3e', '#ef473a'], vinyl: ['#cb2d3e', '#333'], vortex: 0xcb2d3e }, // thodisidaaru
     { aurora: ['#134E5E', '#71B280'], vinyl: ['#71B280', '#134E5E'], vortex: 0x71B280 }, // thriftshop
+    { aurora: ['#4b6cb7', '#182848'], vinyl: ['#4b6cb7', '#222'], vortex: 0x4b6cb7 }, // toxic
+    { aurora: ['#0F2027', '#2C5364'], vinyl: ['#2C5364', '#0F2027'], vortex: 0x2C5364 }, // truestories
+    { aurora: ['#FF4E50', '#F9D423'], vinyl: ['#FF4E50', '#222'], vortex: 0xFF4E50 }, // uddaapunjab
     { aurora: ['#3a6186', '#89253e'], vinyl: ['#89253e', '#3a6186'], vortex: 0x89253e }, // whichone
+    { aurora: ['#83a4d4', '#b6fbff'], vinyl: ['#83a4d4', '#444'], vortex: 0x83a4d4 }, // withyou
     { aurora: ['#D4145A', '#FBB03B'], vinyl: ['#D4145A', '#222'], vortex: 0xD4145A }  // youngblood
 ];
 
