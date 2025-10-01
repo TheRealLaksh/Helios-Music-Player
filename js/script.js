@@ -28,8 +28,10 @@ const albumArtBg = document.getElementById('album-art-bg');
 const auroraBg = document.getElementById('aurora-bg');
 const vinylBg = document.getElementById('vinyl-bg');
 const vortexCanvas = document.getElementById('vortex-canvas');
+const searchInput = document.getElementById('search-input');
+const searchSuggestions = document.getElementById('search-suggestions');
 
-// --- Categorized Playlist Data Structure ---
+// --- Playlist Data ---
 const playlists = [
     {
         name: 'English ',
@@ -109,30 +111,20 @@ let currentPlaylist = null;
 let audioContext, analyser;
 let scene, camera, renderer, lines;
 
-// --- UPDATED Highlight Function ---
 function highlightCurrentSong() {
-    // Reset all items
     document.querySelectorAll('#playlist li').forEach(item => item.classList.remove('playing'));
     document.querySelectorAll('#playlist summary').forEach(item => item.classList.remove('active'));
-
-    // Find and highlight the current song
     const currentSongItem = document.querySelector(`#playlist li[data-index='${songIndex}']`);
     if (currentSongItem) {
         currentSongItem.classList.add('playing');
-        
-        // Find the parent playlist group and highlight its title
         const parentGroup = currentSongItem.closest('.playlist-group');
         if (parentGroup) {
             parentGroup.querySelector('summary').classList.add('active');
-            // Optional: Automatically open the playlist if it's closed
-            if (!parentGroup.open) {
-                parentGroup.open = true;
-            }
+            if (!parentGroup.open) parentGroup.open = true;
         }
     }
 }
 
-// --- Core Functions ---
 function loadSong(song) {
     title.textContent = song.displayName;
     artist.textContent = song.artist;
@@ -163,12 +155,9 @@ function pauseSong() {
 }
 
 function findPlaylistForSong(globalIndex) {
-    let songCounter = 0;
     for (const playlist of playlists) {
-        if (globalIndex < songCounter + playlist.songs.length) {
-            return playlist;
-        }
-        songCounter += playlist.songs.length;
+        const songExists = playlist.songs.find(s => allSongs[globalIndex] && s.name === allSongs[globalIndex].name);
+        if (songExists) return playlist;
     }
     return null;
 }
@@ -183,18 +172,12 @@ function prevSong() {
 
 function nextSong() {
     if (isShuffle) {
-        if (!currentPlaylist) {
-            currentPlaylist = findPlaylistForSong(songIndex) || playlists[0];
-        }
+        if (!currentPlaylist) { currentPlaylist = findPlaylistForSong(songIndex) || playlists[0]; }
         const currentSongInPlaylistIndex = currentPlaylist.songs.findIndex(s => s.name === allSongs[songIndex].name);
         let randomIndexInPlaylist;
-        do {
-            randomIndexInPlaylist = Math.floor(Math.random() * currentPlaylist.songs.length);
-        } while (currentPlaylist.songs.length > 1 && randomIndexInPlaylist === currentSongInPlaylistIndex);
-        
+        do { randomIndexInPlaylist = Math.floor(Math.random() * currentPlaylist.songs.length); } while (currentPlaylist.songs.length > 1 && randomIndexInPlaylist === currentSongInPlaylistIndex);
         const nextShuffledSong = currentPlaylist.songs[randomIndexInPlaylist];
         songIndex = allSongs.findIndex(s => s.name === nextShuffledSong.name);
-
     } else {
         songIndex++;
         if (songIndex > allSongs.length - 1) { songIndex = 0; }
@@ -207,32 +190,34 @@ function nextSong() {
 function updateProgress(e) { if (isPlaying && !isNaN(audio.duration)) { const { duration, currentTime } = e.srcElement; const p = (currentTime / duration) * 100; progress.style.width = `${p}%`; const f = (t) => String(Math.floor(t)).padStart(2, '0'); const dM = Math.floor(duration / 60); const dS = f(duration % 60); durationEl.textContent = `${dM}:${dS}`; const cM = Math.floor(currentTime / 60); const cS = f(currentTime % 60); currentTimeEl.textContent = `${cM}:${cS}`; } }
 function setProgress(e) { const w = this.clientWidth; const cX = e.offsetX; const { duration } = audio; audio.currentTime = (cX / w) * duration; }
 function setVolume() { audio.volume = volumeSlider.value; }
+function generatePlaylist() { playlistEl.innerHTML = ''; playlists.forEach(playlist => { const details = document.createElement('details'); details.classList.add('playlist-group'); const summary = document.createElement('summary'); summary.textContent = playlist.name; details.appendChild(summary); const songList = document.createElement('ul'); playlist.songs.forEach(song => { const li = document.createElement('li'); li.textContent = `${song.displayName} - ${song.artist}`; const songIndexInAllSongs = allSongs.findIndex(s => s.name === song.name); li.setAttribute('data-index', songIndexInAllSongs); li.addEventListener('click', () => { currentPlaylist = playlist; songIndex = songIndexInAllSongs; loadSong(allSongs[songIndex]); playSong(); }); songList.appendChild(li); }); details.appendChild(songList); playlistEl.appendChild(details); }); highlightCurrentSong(); }
 
-function generatePlaylist() {
-    playlistEl.innerHTML = '';
-    playlists.forEach(playlist => {
-        const details = document.createElement('details');
-        details.classList.add('playlist-group');
-        const summary = document.createElement('summary');
-        summary.textContent = playlist.name;
-        details.appendChild(summary);
-        const songList = document.createElement('ul');
-        playlist.songs.forEach(song => {
-            const li = document.createElement('li');
-            li.textContent = `${song.displayName} - ${song.artist}`;
-            const songIndexInAllSongs = allSongs.findIndex(s => s.name === song.name);
-            li.setAttribute('data-index', songIndexInAllSongs);
-            
-            li.addEventListener('click', () => {
-                currentPlaylist = playlist;
-                songIndex = songIndexInAllSongs;
-                loadSong(allSongs[songIndex]);
-                playSong();
-            });
-            songList.appendChild(li);
+function showSearchSuggestions(searchTerm) {
+    searchSuggestions.innerHTML = '';
+    if (!searchTerm.trim()) {
+        searchSuggestions.style.display = 'none';
+        return;
+    }
+    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+    const filteredSongs = allSongs.filter(song => song.displayName.toLowerCase().includes(lowerCaseSearchTerm) || song.artist.toLowerCase().includes(lowerCaseSearchTerm));
+    if (filteredSongs.length > 0) {
+        searchSuggestions.style.display = 'block';
+    } else {
+        searchSuggestions.style.display = 'none';
+    }
+    filteredSongs.slice(0, 5).forEach(song => {
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>${song.displayName}</strong><br><span>${song.artist}</span>`;
+        li.addEventListener('click', () => {
+            songIndex = allSongs.findIndex(s => s.name === song.name);
+            currentPlaylist = findPlaylistForSong(songIndex);
+            loadSong(allSongs[songIndex]);
+            playSong();
+            searchInput.value = '';
+            searchSuggestions.innerHTML = '';
+            searchSuggestions.style.display = 'none';
         });
-        details.appendChild(songList);
-        playlistEl.appendChild(details);
+        searchSuggestions.appendChild(li);
     });
 }
 
@@ -345,6 +330,14 @@ settingOptions.forEach(option => {
     });
 });
 
+searchInput.addEventListener('input', (e) => {
+    showSearchSuggestions(e.target.value);
+});
+document.addEventListener('click', (e) => {
+    if (!document.querySelector('.search-wrapper').contains(e.target)) {
+        searchSuggestions.style.display = 'none';
+    }
+});
 playBtn.addEventListener('click', () => { if (!audioContext) { setupPlayerVisualizer(); } isPlaying ? pauseSong() : playSong(); });
 settingsToggle.addEventListener('click', toggleSettingsPanel);
 settingsClose.addEventListener('click', toggleSettingsPanel);
@@ -367,7 +360,6 @@ window.addEventListener('resize', () => {
     }
 });
 
-// --- On Load ---
 loadSong(allSongs[songIndex]);
 generatePlaylist();
 updateActiveBackground();

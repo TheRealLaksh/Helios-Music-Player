@@ -1,107 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Helios Music Player | Laksh Pradhwani </title>
-    <link rel="icon" type="image/jpeg" href="assets/images/favicon.jpg">
+    <title>Helios Music Player | Laksh Pradhwani</title>
+    <link rel="icon" type="image/jpeg" href="Assets/images/favicon.jpg">
     <link rel="stylesheet" href="css/style.css">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
-
 <body>
-    <!-- Background containers are all outside the app container -->
+    <!-- Backgrounds -->
     <div id="album-art-bg" class="background-container"></div>
     <div id="aurora-bg" class="background-container"></div>
     <div id="vinyl-bg" class="background-container"></div>
     <canvas id="vortex-canvas" class="background-container"></canvas>
 
-    <div class="app-container">
-        <main class="player">
-            <header class="player-header">
-                <button class="action-btn" id="playlist-toggle">
-                    <i class="ph ph-list"></i>
-                </button>
-                <span>Now Playing</span>
-                <button class="action-btn" id="settings-toggle">
-                    <i class="ph ph-dots-three-outline"></i>
-                </button>
-            </header>
+    <!-- NEW: Site Wrapper for Grid Layout -->
+    <div class="site-wrapper">
 
-            <div class="album-art-container">
-                <img src="" alt="Album Art" class="album-art">
+        <!-- Search Bar and Suggestions Container -->
+        <div class="search-wrapper">
+            <div class="search-container">
+                <i class="ph ph-magnifying-glass"></i>
+                <input type="text" id="search-input" placeholder="Search for songs or artists..." autocomplete="off">
             </div>
-
-            <div class="song-details">
-                <h2 id="title">Song Title</h2>
-                <h3 id="artist">Artist Name</h3>
-            </div>
-
-            <audio id="audio" src=""></audio>
-
-            <div class="progress-container" id="progress-container">
-                <div class="progress" id="progress"></div>
-                <div class="duration-wrapper">
-                    <span id="current-time">0:00</span>
-                    <span id="duration">0:00</span>
-                </div>
-            </div>
-
-            <div class="player-controls">
-                <button class="action-btn" id="shuffle-btn">
-                    <i class="ph ph-shuffle"></i>
-                </button>
-                <button id="prev" class="action-btn">
-                    <i class="ph ph-skip-back"></i>
-                </button>
-                <button id="play" class="action-btn action-btn-big">
-                    <i class="ph ph-play"></i>
-                </button>
-                <button id="next" class="action-btn">
-                    <i class="ph ph-skip-forward"></i>
-                </button>
-                <button class="action-btn" id="repeat-btn">
-                    <i class="ph ph-repeat"></i>
-                </button>
-            </div>
-
-             <canvas id="visualizer"></canvas>
-
-        <div class="volume-container">
-            <i class="ph ph-speaker-simple-low"></i>
-            <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1">
-            <i class="ph ph-speaker-simple-high"></i>
+            <ul id="search-suggestions"></ul>
         </div>
 
-        <aside class="playlist-panel">
-            <div class="playlist-header">
-                <h3>Playlist</h3>
-                <button class="action-btn" id="playlist-close">
-                    <i class="ph ph-x"></i>
-                </button>
-            </div>
-            <ul id="playlist"></ul>
-        </aside>
+        <!-- App Container (The Player) -->
+        <div class="app-container">
+            <main class="player">
+                <header class="player-header">
+                    <button class="action-btn" id="playlist-toggle">
+                        <i class="ph ph-list"></i>
+                    </button>
+                    <span>Now Playing</span>
+                    <button class="action-btn" id="settings-toggle">
+                        <i class="ph ph-dots-three-outline"></i>
+                    </button>
+                </header>
 
-        <aside class="settings-panel">
-            <div class="settings-header">
-                <h3>Background Style</h3>
-                <button class="action-btn" id="settings-close">
-                    <i class="ph ph-x"></i>
-                </button>
-            </div>
-            <div class="settings-options">
-                <button class="setting-option" data-bg="aurora">Aurora</button>
-                <button class="setting-option" data-bg="vinyl">Vinyl</button>
-                <button class="setting-option" data-bg="vortex">Vortex</button>
-                <button class="setting-option active" data-bg="off">Off (Album Art)</button>
-            </div>
-        </aside>
+                <div class="album-art-container">
+                    <img src="" alt="Album Art" class="album-art">
+                </div>
+
+                <div class="song-details">
+                    <h2 id="title">Song Title</h2>
+                    <h3 id="artist">Artist Name</h3>
+                </div>
+                
+                <audio id="audio" src=""></audio>
+
+                <div class="progress-container" id="progress-container">
+                    <div class="progress" id="progress"></div>
+                    <div class="duration-wrapper">
+                        <span id="current-time">0:00</span>
+                        <span id="duration">0:00</span>
+                    </div>
+                </div>
+
+                <div class="player-controls">
+                    <button class="action-btn" id="shuffle-btn"><i class="ph ph-shuffle"></i></button>
+                    <button id="prev" class="action-btn"><i class="ph ph-skip-back"></i></button>
+                    <button id="play" class="action-btn action-btn-big"><i class="ph ph-play"></i></button>
+                    <button id="next" class="action-btn"><i class="ph ph-skip-forward"></i></button>
+                    <button class="action-btn" id="repeat-btn"><i class="ph ph-repeat"></i></button>
+                </div>
+                
+                <canvas id="visualizer"></canvas>
+
+                <div class="volume-container">
+                    <i class="ph ph-speaker-simple-low"></i>
+                    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1">
+                    <i class="ph ph-speaker-simple-high"></i>
+                </div>
+            </main>
+            
+            <aside class="playlist-panel">
+                <div class="playlist-header">
+                    <h3>Playlist</h3>
+                    <button class="action-btn" id="playlist-close"><i class="ph ph-x"></i></button>
+                </div>
+                <ul id="playlist"></ul>
+            </aside>
+
+            <aside class="settings-panel">
+                <div class="settings-header">
+                    <h3>Background Style</h3>
+                    <button class="action-btn" id="settings-close"><i class="ph ph-x"></i></button>
+                </div>
+                <div class="settings-options">
+                    <button class="setting-option" data-bg="aurora">Aurora</button>
+                    <button class="setting-option" data-bg="vinyl">Vinyl</button>
+                    <button class="setting-option" data-bg="vortex">Vortex</button>
+                    <button class="setting-option active" data-bg="off">Off (Album Art)</button>
+                </div>
+            </aside>
+        </div>
     </div>
-
     <script src="js/script.js" defer></script>
 </body>
-
 </html>
