@@ -233,3 +233,39 @@ input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance
 #playlist::-webkit-scrollbar-thumb:hover, #search-suggestions::-webkit-scrollbar-thumb:hover {
   background-color: #1ed760;
 }
+
+/* --- NEW: Home Button Styles --- */
+
+#home-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 100; /* Ensure it's on top of everything */
+    background-color: var(--surface-color);
+    color: var(--text-secondary);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 24px;
+    text-decoration: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+#home-button:hover {
+    background-color: var(--primary-color);
+    color: var(--text-primary);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(29, 185, 84, 0.4);
+}
+
+/* Hide the button on mobile if the search bar is taking up space */
+@media (max-width: 899px) {
+    #home-button {
+        bottom: 15px;
+        left: 15px;
+    }
+}
