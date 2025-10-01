@@ -29,94 +29,81 @@ const auroraBg = document.getElementById('aurora-bg');
 const vinylBg = document.getElementById('vinyl-bg');
 const vortexCanvas = document.getElementById('vortex-canvas');
 
-// --- Final Playlist ---
-const songs = [
-    { name: '3peg', displayName: '3 Peg', artist: 'Sharry Mann', cover: '3peg' },
-    { name: '945', displayName: '9:45', artist: 'Prabh Singh, Jay Trak, Rooh Sandhu', cover: '945' },
-    { name: 'admirinyou', displayName: 'Admirin\' You', artist: 'Karan Aujla', cover: 'admirinyou' },
-    { name: 'baawe', displayName: 'Baawe', artist: 'Samay Raina, Raftaar, AP Dhillon', cover: 'baawe' },
-    { name: 'band4band', displayName: 'Band4Band', artist: 'Central Cee & Lil Baby', cover: 'band4band' },
-    { name: 'bemine', displayName: 'Be Mine', artist: 'Shubh', cover: 'bemine' },
-    { name: 'daaku', displayName: 'Daaku', artist: 'Badshah, Sharvi Yadav, Hiten', cover: 'daaku' },
-    { name: 'darji', displayName: 'Darji', artist: 'Prabh Singh & Rooh Sandhu', cover: 'darji' },
-    { name: 'doja', displayName: 'Doja', artist: 'Central Cee', cover: 'doja' },
-    { name: 'donteventext', displayName: 'Don\'t Even Text', artist: 'Tsumyoki & Ginni', cover: 'donteventext' },
-    { name: 'dtmf', displayName: 'DTMF', artist: 'Bad Bunny', cover: 'dtmf' },
-    { name: 'excuses', displayName: 'Excuses', artist: 'AP Dhillon, Gurinder Gill', cover: 'excuses' },
-    { name: 'farebi', displayName: 'Farebi', artist: 'Chaar Diwaari & Raftaar', cover: 'farebi' },
-    { name: 'followyou', displayName: 'Follow You', artist: 'Imagine Dragons', cover: 'followyou' },
-    { name: 'ghost', displayName: 'Ghost', artist: 'Justin Bieber', cover: 'ghost' },
-    { name: 'godsplan', displayName: 'God\'s Plan', artist: 'Drake', cover: 'godsplan' },
-    { name: 'hometownsmile', displayName: 'Hometown Smile', artist: 'Bahjat', cover: 'hometownsmile' },
-    { name: 'howlong', displayName: 'How Long', artist: 'Charlie Puth', cover: 'howlong' },
-    { name: 'loveya', displayName: 'Love Ya', artist: 'Karan Aujla', cover: 'loveya' },
-    { name: 'magic', displayName: 'Magic', artist: 'AP Dhillon', cover: 'magic' },
-    { name: 'mexico', displayName: 'Mexico', artist: 'Shotgun Willy', cover: 'mexico' },
-    { name: 'millionaire', displayName: 'Millionaire', artist: 'Yo Yo Honey Singh, Simar Kaur', cover: 'millionaire' },
-    { name: 'numb', displayName: 'Numb', artist: 'Marshmello', cover: 'numb' },
-    { name: 'obsessed', displayName: 'Obsessed', artist: 'Riar Saab, Abhijay Sharma', cover: 'obsessed' },
-    { name: 'oldmoney', displayName: 'Old Money', artist: 'Karan Aujla', cover: 'oldmoney' },
-    { name: 'ordinary', displayName: 'Ordinary', artist: 'Alex Warren', cover: 'ordinary' },
-    { name: 'paro', displayName: 'Paro', artist: 'Aditya Rikhari', cover: 'paro' },
-    { name: 'run', displayName: 'Run', artist: 'OneRepublic', cover: 'run' },
-    { name: 'selflove', displayName: 'Self Love', artist: 'Metro Boomin, Coi Leray', cover: 'selflove' },
-    { name: 'somethingjustlikethis', displayName: 'Something Just Like This', artist: 'The Chainsmokers & Coldplay', cover: 'somethingjustlikethis' },
-    { name: 'sprinter', displayName: 'Sprinter', artist: 'Dave & Central Cee', cover: 'sprinter' },
-    { name: 'stfu', displayName: 'STFU', artist: 'Karan Aujla', cover: 'stfu' },
-    { name: 'thodisidaaru', displayName: 'Thodi Si Daaru', artist: 'AP Dhillon & Shreya Ghoshal', cover: 'thodisidaaru' },
-    { name: 'thriftshop', displayName: 'Thrift Shop', artist: 'Macklemore & Ryan Lewis', cover: 'thriftshop' },
-    { name: 'toxic', displayName: 'Toxic', artist: 'AP Dhillon, Gurinder Gill', cover: 'toxic' },
-    { name: 'truestories', displayName: 'True Stories', artist: 'AP Dhillon, Gurinder Gill', cover: 'truestories' },
-    { name: 'uddaapunjab', displayName: 'Ud Daa Punjab', artist: 'Amit Trivedi', cover: 'uddaapunjab' },
-    { name: 'whichone', displayName: 'Which One', artist: 'Drake & Central Cee', cover: 'whichone' },
-    { name: 'withyou', displayName: 'With You', artist: 'AP Dhillon', cover: 'withyou' },
-    { name: 'youngblood', displayName: 'Youngblood', artist: '5 Seconds of Summer', cover: 'youngblood' }
+// --- Categorized Playlist Data Structure ---
+const playlists = [
+    {
+        name: 'English ',
+        songs: [
+            { name: 'band4band', displayName: 'Band4Band', artist: 'Central Cee & Lil Baby', cover: 'band4band' },
+            { name: 'doja', displayName: 'Doja', artist: 'Central Cee', cover: 'doja' },
+            { name: 'dtmf', displayName: 'DTMF', artist: 'Bad Bunny', cover: 'dtmf' },
+            { name: 'followyou', displayName: 'Follow You', artist: 'Imagine Dragons', cover: 'followyou' },
+            { name: 'ghost', displayName: 'Ghost', artist: 'Justin Bieber', cover: 'ghost' },
+            { name: 'godsplan', displayName: 'God\'s Plan', artist: 'Drake', cover: 'godsplan' },
+            { name: 'hometownsmile', displayName: 'Hometown Smile', artist: 'Bahjat', cover: 'hometownsmile' },
+            { name: 'howlong', displayName: 'How Long', artist: 'Charlie Puth', cover: 'howlong' },
+            { name: 'mexico', displayName: 'Mexico', artist: 'Shotgun Willy', cover: 'mexico' },
+            { name: 'numb', displayName: 'Numb', artist: 'Marshmello', cover: 'numb' },
+            { name: 'ordinary', displayName: 'Ordinary', artist: 'Alex Warren', cover: 'ordinary' },
+            { name: 'run', displayName: 'Run', artist: 'OneRepublic', cover: 'run' },
+            { name: 'selflove', displayName: 'Self Love', artist: 'Metro Boomin, Coi Leray', cover: 'selflove' },
+            { name: 'somethingjustlikethis', displayName: 'Something Just Like This', artist: 'The Chainsmokers & Coldplay', cover: 'somethingjustlikethis' },
+            { name: 'sprinter', displayName: 'Sprinter', artist: 'Dave & Central Cee', cover: 'sprinter' },
+            { name: 'thriftshop', displayName: 'Thrift Shop', artist: 'Macklemore & Ryan Lewis', cover: 'thriftshop' },
+            { name: 'whichone', displayName: 'Which One', artist: 'Drake & Central Cee', cover: 'whichone' },
+            { name: 'youngblood', displayName: 'Youngblood', artist: '5 Seconds of Summer', cover: 'youngblood' },
+        ]
+    },
+    {
+        name: 'Punjabi ',
+        songs: [
+            { name: '3peg', displayName: '3 Peg', artist: 'Sharry Mann', cover: '3peg' },
+            { name: '945', displayName: '9:45', artist: 'Prabh Singh, Jay Trak, Rooh Sandhu', cover: '945' },
+            { name: 'admirinyou', displayName: 'Admirin\' You', artist: 'Karan Aujla', cover: 'admirinyou' },
+            { name: 'baawe', displayName: 'Baawe', artist: 'AP Dhillon', cover: 'baawe' },
+            { name: 'bemine', displayName: 'Be Mine', artist: 'AP Dhillon', cover: 'bemine' },
+            { name: 'daaku', displayName: 'Daaku', artist: 'Badshah, Sharvi Yadav, Hiten', cover: 'daaku' },
+            { name: 'darji', displayName: 'Darji', artist: 'Prabh Singh & Rooh Sandhu', cover: 'darji' },
+            { name: 'excuses', displayName: 'Excuses', artist: 'AP Dhillon, Gurinder Gill', cover: 'excuses' },
+            { name: 'goddamn', displayName: 'God Damn', artist: 'Badshah, Karan Aujla, Hiten', cover: 'goddamn' },
+            { name: 'loveya', displayName: 'Love Ya', artist: 'Karan Aujla', cover: 'loveya' },
+            { name: 'magic', displayName: 'Magic', artist: 'AP Dhillon', cover: 'magic' },
+            { name: 'millionaire', displayName: 'Millionaire', artist: 'Yo Yo Honey Singh, Simar Kaur', cover: 'millionaire' },
+            { name: 'obsessed', displayName: 'Obsessed', artist: 'Riar Saab, Abhijay Sharma', cover: 'obsessed' },
+            { name: 'oldmoney', displayName: 'Old Money', artist: 'Karan Aujla', cover: 'oldmoney' },
+            { name: 'stfu', displayName: 'STFU', artist: 'Karan Aujla', cover: 'stfu' },
+            { name: 'thodisidaaru', displayName: 'Thodi Si Daaru', artist: 'AP Dhillon & Shreya Ghoshal', cover: 'thodisidaaru' },
+            { name: 'toxic', displayName: 'Toxic', artist: 'AP Dhillon, Gurinder Gill', cover: 'toxic' },
+            { name: 'truestories', displayName: 'True Stories', artist: 'AP Dhillon, Gurinder Gill', cover: 'truestories' },
+            { name: 'uddaapunjab', displayName: 'Ud Daa Punjab', artist: 'Diljit Dosanjh', cover: 'uddaapunjab' },
+            { name: 'withyou', displayName: 'With You', artist: 'AP Dhillon', cover: 'withyou' },
+        ]
+    },
+    {
+        name: 'Hindi ',
+        songs: [
+            { name: 'donteventext', displayName: 'Don\'t Even Text', artist: 'Tsumyoki & Ginni', cover: 'donteventext' },
+            { name: 'farebi', displayName: 'Farebi', artist: 'Chaar Diwaari & Raftaar', cover: 'farebi' },
+            { name: 'paro', displayName: 'Paro', artist: 'Aditya Rikhari', cover: 'paro' },
+        ]
+    }
 ];
 
-// --- Final Color Presets ---
-const colorPresets = [
-    { aurora: ['#f2994a', '#f2c94c'], vinyl: ['#f2994a', '#333'], vortex: 0xf2994a },
-    { aurora: ['#00c6ff', '#0072ff'], vinyl: ['#00c6ff', '#222'], vortex: 0x00c6ff },
-    { aurora: ['#ED213A', '#93291E'], vinyl: ['#ED213A', '#444'], vortex: 0xED213A },
-    { aurora: ['#B24592', '#F15F79'], vinyl: ['#B24592', '#333'], vortex: 0xB24592 },
-    { aurora: ['#2c3e50', '#fd746c'], vinyl: ['#fd746c', '#2c3e50'], vortex: 0xfd746c },
-    { aurora: ['#ffdde1', '#ee9ca7'], vinyl: ['#ee9ca7', '#444'], vortex: 0xee9ca7 },
-    { aurora: ['#141E30', '#243B55'], vinyl: ['#243B55', '#141E30'], vortex: 0x243B55 },
-    { aurora: ['#00C9FF', '#92FE9D'], vinyl: ['#00C9FF', '#282828'], vortex: 0x00C9FF },
-    { aurora: ['#e96443', '#904e95'], vinyl: ['#e96443', '#333'], vortex: 0xe96443 },
-    { aurora: ['#F7971E', '#FFD200'], vinyl: ['#F7971E', '#444'], vortex: 0xF7971E },
-    { aurora: ['#1c92d2', '#f2fcfe'], vinyl: ['#1c92d2', '#333'], vortex: 0x1c92d2 },
-    { aurora: ['#DA4453', '#89216B'], vinyl: ['#DA4453', '#222'], vortex: 0xDA4453 },
-    { aurora: ['#ff4b1f', '#1fddff'], vinyl: ['#ff4b1f', '#222'], vortex: 0xff4b1f },
-    { aurora: ['#000428', '#004e92'], vinyl: ['#004e92', '#222'], vortex: 0x004e92 },
-    { aurora: ['#f7ff00', '#db36a4'], vinyl: ['#f7ff00', '#444'], vortex: 0xf7ff00 },
-    { aurora: ['#8E2DE2', '#4A00E0'], vinyl: ['#8E2DE2', '#333'], vortex: 0x8E2DE2 },
-    { aurora: ['#fceabb', '#f8b500'], vinyl: ['#f8b500', '#444'], vortex: 0xf8b500 },
-    { aurora: ['#2980b9', '#6dd5fa'], vinyl: ['#6dd5fa', '#2980b9'], vortex: 0x6dd5fa },
-    { aurora: ['#E55D87', '#5FC3E4'], vinyl: ['#E55D87', '#444'], vortex: 0xE55D87 },
-    { aurora: ['#5614B0', '#DBD65C'], vinyl: ['#5614B0', '#222'], vortex: 0x5614B0 },
-    { aurora: ['#16A085', '#F4D03F'], vinyl: ['#16A085', '#222'], vortex: 0x16A085 },
-    { aurora: ['#D4AF37', '#B59410'], vinyl: ['#D4AF37', '#444'], vortex: 0xD4AF37 },
-    { aurora: ['#3a7bd5', '#3a6073'], vinyl: ['#3a7bd5', '#222'], vortex: 0x3a7bd5 },
-    { aurora: ['#C02425', '#F0CB35'], vinyl: ['#C02425', '#333'], vortex: 0xC02425 },
-    { aurora: ['#43C6AC', '#F8FFAE'], vinyl: ['#43C6AC', '#222'], vortex: 0x43C6AC },
-    { aurora: ['#a1c4fd', '#c2e9fb'], vinyl: ['#a1c4fd', '#444'], vortex: 0xa1c4fd },
-    { aurora: ['#1D2B64', '#F8CDDA'], vinyl: ['#F8CDDA', '#1D2B64'], vortex: 0xF8CDDA },
-    { aurora: ['#ff9966', '#ff5e62'], vinyl: ['#ff9966', '#333'], vortex: 0xff9966 },
-    { aurora: ['#e52d27', '#b31217'], vinyl: ['#e52d27', '#222'], vortex: 0xe52d27 },
-    { aurora: ['#2948ff', '#ff66c4'], vinyl: ['#2948ff', '#222'], vortex: 0x2948ff },
-    { aurora: ['#007991', '#78ffd6'], vinyl: ['#007991', '#222'], vortex: 0x007991 },
-    { aurora: ['#932214', '#C33764'], vinyl: ['#932214', '#222'], vortex: 0x932214 },
-    { aurora: ['#cb2d3e', '#ef473a'], vinyl: ['#cb2d3e', '#333'], vortex: 0xcb2d3e },
-    { aurora: ['#134E5E', '#71B280'], vinyl: ['#71B280', '#134E5E'], vortex: 0x71B280 },
-    { aurora: ['#4b6cb7', '#182848'], vinyl: ['#4b6cb7', '#222'], vortex: 0x4b6cb7 },
-    { aurora: ['#0F2027', '#2C5364'], vinyl: ['#2C5364', '#0F2027'], vortex: 0x2C5364 },
-    { aurora: ['#FF4E50', '#F9D423'], vinyl: ['#FF4E50', '#222'], vortex: 0xFF4E50 },
-    { aurora: ['#3a6186', '#89253e'], vinyl: ['#89253e', '#3a6186'], vortex: 0x89253e },
-    { aurora: ['#83a4d4', '#b6fbff'], vinyl: ['#83a4d4', '#444'], vortex: 0x83a4d4 },
-    { aurora: ['#D4145A', '#FBB03B'], vinyl: ['#D4145A', '#222'], vortex: 0xD4145A }
-];
+// --- Create a single, flat array of all songs for playback logic ---
+const allSongs = playlists.flatMap(p => p.songs);
 
+// --- Dynamically generate color presets ---
+const colorPresets = allSongs.map(song => {
+    let hash = 0;
+    for (let i = 0; i < song.name.length; i++) {
+        hash = song.name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const color1 = (hash & 0x00FFFFFF).toString(16).toUpperCase();
+    const color2 = ((hash >> 8) & 0x00FFFFFF).toString(16).toUpperCase();
+    const aurora1 = "#" + "00000".substring(0, 6 - color1.length) + color1;
+    const aurora2 = "#" + "00000".substring(0, 6 - color2.length) + color2;
+    return { aurora: [aurora1, aurora2], vinyl: [aurora1, '#222'], vortex: parseInt(color1.replace('#',''), 16) };
+});
 
 // --- State Management ---
 let isPlaying = false;
@@ -169,26 +156,38 @@ function pauseSong() {
     if (vinylSVG) vinylSVG.classList.remove('playing');
 }
 
-function prevSong() { songIndex--; if (songIndex < 0) songIndex = songs.length - 1; loadSong(songs[songIndex]); playSong(); }
+function prevSong() {
+    songIndex--;
+    if (songIndex < 0) { songIndex = allSongs.length - 1; }
+    loadSong(allSongs[songIndex]);
+    playSong();
+}
 
 function nextSong() {
-    if (isShuffle) { let r; do { r = Math.floor(Math.random() * songs.length); } while (r === songIndex); songIndex = r; }
-    else { songIndex++; if (songIndex > songs.length - 1) songIndex = 0; }
-    loadSong(songs[songIndex]); playSong();
+    if (isShuffle) {
+        let r;
+        do { r = Math.floor(Math.random() * allSongs.length); } while (r === songIndex);
+        songIndex = r;
+    } else {
+        songIndex++;
+        if (songIndex > allSongs.length - 1) { songIndex = 0; }
+    }
+    loadSong(allSongs[songIndex]);
+    playSong();
 }
 
 function updateProgress(e) {
     if (isPlaying && !isNaN(audio.duration)) {
         const { duration, currentTime } = e.srcElement;
-        const progressPercent = (currentTime / duration) * 100;
-        progress.style.width = `${progressPercent}%`;
-        const formatTime = (time) => String(Math.floor(time)).padStart(2, '0');
-        const durationMinutes = Math.floor(duration / 60);
-        const durationSeconds = formatTime(duration % 60);
-        durationEl.textContent = `${durationMinutes}:${durationSeconds}`;
-        const currentMinutes = Math.floor(currentTime / 60);
-        const currentSeconds = formatTime(currentTime % 60);
-        currentTimeEl.textContent = `${currentMinutes}:${currentSeconds}`;
+        const p = (currentTime / duration) * 100;
+        progress.style.width = `${p}%`;
+        const f = (t) => String(Math.floor(t)).padStart(2, '0');
+        const dM = Math.floor(duration / 60);
+        const dS = f(duration % 60);
+        durationEl.textContent = `${dM}:${dS}`;
+        const cM = Math.floor(currentTime / 60);
+        const cS = f(currentTime % 60);
+        currentTimeEl.textContent = `${cM}:${cS}`;
     }
 }
 
@@ -198,17 +197,28 @@ function setVolume() { audio.volume = volumeSlider.value; }
 
 function generatePlaylist() {
     playlistEl.innerHTML = '';
-    songs.forEach((song, i) => { 
-        const li = document.createElement('li'); 
-        li.textContent = `${song.displayName} - ${song.artist}`; 
-        li.setAttribute('data-index', i);
-        li.addEventListener('click', () => { 
-            songIndex = i; 
-            loadSong(songs[songIndex]); 
-            playSong(); 
-        }); 
-        playlistEl.appendChild(li); 
-    }); 
+    playlists.forEach(playlist => {
+        const details = document.createElement('details');
+        details.classList.add('playlist-group');
+        const summary = document.createElement('summary');
+        summary.textContent = playlist.name;
+        details.appendChild(summary);
+        const songList = document.createElement('ul');
+        playlist.songs.forEach(song => {
+            const li = document.createElement('li');
+            li.textContent = `${song.displayName} - ${song.artist}`;
+            const songIndexInAllSongs = allSongs.findIndex(s => s.name === song.name);
+            li.setAttribute('data-index', songIndexInAllSongs);
+            li.addEventListener('click', () => {
+                songIndex = songIndexInAllSongs;
+                loadSong(allSongs[songIndex]);
+                playSong();
+            });
+            songList.appendChild(li);
+        });
+        details.appendChild(songList);
+        playlistEl.appendChild(details);
+    });
 }
 
 function togglePlaylist() { settingsPanel.classList.remove('show'); playlistPanel.classList.toggle('show'); }
@@ -230,7 +240,7 @@ function setupPlayerVisualizer() {
     const dataArray = new Uint8Array(bufferLength);
     function draw() {
         requestAnimationFrame(draw);
-        if(analyser) {
+        if (analyser) {
             analyser.getByteFrequencyData(dataArray);
             playerVisualizerCtx.clearRect(0, 0, playerVisualizerCanvas.width, playerVisualizerCanvas.height);
             const barWidth = (playerVisualizerCanvas.width / bufferLength) * 2.5;
@@ -252,6 +262,7 @@ function updateActiveBackground() {
     vinylBg.classList.remove('active');
     vortexCanvas.classList.remove('active');
     const colors = colorPresets[songIndex];
+    if (!colors) return;
     switch (activeBackground) {
         case 'aurora':
             auroraBg.style.setProperty('--aurora1', colors.aurora[0]);
@@ -268,7 +279,7 @@ function updateActiveBackground() {
             break;
         case 'off':
         default:
-            albumArtBg.style.backgroundImage = `url('assets/images/${songs[songIndex].cover}.jpg')`;
+            albumArtBg.style.backgroundImage = `url('assets/images/${allSongs[songIndex].cover}.jpg')`;
             albumArtBg.classList.add('active');
             break;
     }
@@ -281,6 +292,7 @@ function initVortex() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     lines = [];
     const lineCount = 100, radius = 5;
+    // THIS IS THE CORRECTED LINE
     for (let i = 0; i < lineCount; i++) {
         const geometry = new THREE.BufferGeometry();
         const vertices = new Float32Array([-1000, 0, 0, 1000, 0, 0]);
@@ -343,6 +355,6 @@ window.addEventListener('resize', () => {
 });
 
 // --- On Load ---
-loadSong(songs[songIndex]);
+loadSong(allSongs[songIndex]);
 generatePlaylist();
 updateActiveBackground();

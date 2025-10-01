@@ -389,3 +389,67 @@ input[type="range"]::-webkit-slider-thumb {
     background-repeat: no-repeat;
     background-position: center;
 }
+
+
+/* --- NEW: Accordion Playlist Styles --- */
+
+#playlist {
+    padding-right: 5px;
+    /* Add some space for the scrollbar */
+}
+
+.playlist-group {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.playlist-group summary {
+    padding: 18px 5px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+    /* Remove default arrow */
+    position: relative;
+    transition: background-color 0.2s;
+}
+
+.playlist-group summary:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.playlist-group summary::-webkit-details-marker {
+    display: none;
+    /* Hide default arrow for Chrome */
+}
+
+/* Custom arrow */
+.playlist-group summary::after {
+    content: '+';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: var(--text-secondary);
+}
+
+.playlist-group[open]>summary::after {
+    content: '−';
+}
+
+.playlist-group ul {
+    list-style: none;
+    padding-left: 15px;
+    /* Indent the songs */
+}
+
+/* We need to move the border to the new inner list items */
+#playlist li {
+    border-bottom: none;
+    padding: 12px 5px;
+}
+
+.playlist-group ul li {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
