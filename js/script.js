@@ -66,7 +66,7 @@ const songs = [
     { name: 'thriftshop', displayName: 'Thrift Shop', artist: 'Macklemore & Ryan Lewis', cover: 'thriftshop' },
     { name: 'toxic', displayName: 'Toxic', artist: 'AP Dhillon, Gurinder Gill', cover: 'toxic' },
     { name: 'truestories', displayName: 'True Stories', artist: 'AP Dhillon, Gurinder Gill', cover: 'truestories' },
-    { name: 'uddaapunjab', displayName: 'Ud Daa Punjab', artist: 'Diljit Dosanjh', cover: 'uddaapunjab' },
+    { name: 'uddaapunjab', displayName: 'Ud Daa Punjab', artist: 'Amit Trivedi', cover: 'uddaapunjab' },
     { name: 'whichone', displayName: 'Which One', artist: 'Drake & Central Cee', cover: 'whichone' },
     { name: 'withyou', displayName: 'With You', artist: 'AP Dhillon', cover: 'withyou' },
     { name: 'youngblood', displayName: 'Youngblood', artist: '5 Seconds of Summer', cover: 'youngblood' }
