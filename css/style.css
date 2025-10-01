@@ -486,3 +486,9 @@ input[type="range"]::-webkit-slider-thumb {
     background-color: #1ed760;
     /* A slightly brighter green on hover */
 }
+
+/* ---  Active Playlist Title Highlight --- */
+
+.playlist-group summary.active {
+    color: var(--primary-color);
+}

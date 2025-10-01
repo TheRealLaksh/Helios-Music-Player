@@ -65,6 +65,7 @@ const playlists = [
             { name: 'daaku', displayName: 'Daaku', artist: 'Badshah, Sharvi Yadav, Hiten', cover: 'daaku' },
             { name: 'darji', displayName: 'Darji', artist: 'Prabh Singh & Rooh Sandhu', cover: 'darji' },
             { name: 'excuses', displayName: 'Excuses', artist: 'AP Dhillon, Gurinder Gill, Intense', cover: 'excuses' },
+            { name: 'goddamn', displayName: 'God Damn', artist: 'Badshah, Karan Aujla, Hiten', cover: 'goddamn' },
             { name: 'loveya', displayName: 'Love Ya', artist: 'Karan Aujla', cover: 'loveya' },
             { name: 'magic', displayName: 'Magic', artist: 'AP Dhillon', cover: 'magic' },
             { name: 'millionaire', displayName: 'Millionaire', artist: 'Yo Yo Honey Singh, Simar Kaur, Singhsta', cover: 'millionaire' },
@@ -104,16 +105,34 @@ let songIndex = 0;
 let isShuffle = false;
 let isRepeat = false;
 let activeBackground = 'off';
-let currentPlaylist = null; // NEW: To track the active playlist for shuffle
+let currentPlaylist = null;
 let audioContext, analyser;
 let scene, camera, renderer, lines;
 
+// --- UPDATED Highlight Function ---
 function highlightCurrentSong() {
+    // Reset all items
     document.querySelectorAll('#playlist li').forEach(item => item.classList.remove('playing'));
+    document.querySelectorAll('#playlist summary').forEach(item => item.classList.remove('active'));
+
+    // Find and highlight the current song
     const currentSongItem = document.querySelector(`#playlist li[data-index='${songIndex}']`);
-    if (currentSongItem) currentSongItem.classList.add('playing');
+    if (currentSongItem) {
+        currentSongItem.classList.add('playing');
+        
+        // Find the parent playlist group and highlight its title
+        const parentGroup = currentSongItem.closest('.playlist-group');
+        if (parentGroup) {
+            parentGroup.querySelector('summary').classList.add('active');
+            // Optional: Automatically open the playlist if it's closed
+            if (!parentGroup.open) {
+                parentGroup.open = true;
+            }
+        }
+    }
 }
 
+// --- Core Functions ---
 function loadSong(song) {
     title.textContent = song.displayName;
     artist.textContent = song.artist;
@@ -157,21 +176,18 @@ function findPlaylistForSong(globalIndex) {
 function prevSong() {
     songIndex--;
     if (songIndex < 0) { songIndex = allSongs.length - 1; }
-    currentPlaylist = findPlaylistForSong(songIndex); // Update playlist context
+    currentPlaylist = findPlaylistForSong(songIndex);
     loadSong(allSongs[songIndex]);
     playSong();
 }
 
 function nextSong() {
     if (isShuffle) {
-        // Ensure there is a current playlist context for shuffling
         if (!currentPlaylist) {
             currentPlaylist = findPlaylistForSong(songIndex) || playlists[0];
         }
-
         const currentSongInPlaylistIndex = currentPlaylist.songs.findIndex(s => s.name === allSongs[songIndex].name);
         let randomIndexInPlaylist;
-        
         do {
             randomIndexInPlaylist = Math.floor(Math.random() * currentPlaylist.songs.length);
         } while (currentPlaylist.songs.length > 1 && randomIndexInPlaylist === currentSongInPlaylistIndex);
@@ -182,7 +198,7 @@ function nextSong() {
     } else {
         songIndex++;
         if (songIndex > allSongs.length - 1) { songIndex = 0; }
-        currentPlaylist = findPlaylistForSong(songIndex); // Update playlist context
+        currentPlaylist = findPlaylistForSong(songIndex);
     }
     loadSong(allSongs[songIndex]);
     playSong();
@@ -208,7 +224,7 @@ function generatePlaylist() {
             li.setAttribute('data-index', songIndexInAllSongs);
             
             li.addEventListener('click', () => {
-                currentPlaylist = playlist; // CRITICAL: Set the current playlist on click
+                currentPlaylist = playlist;
                 songIndex = songIndexInAllSongs;
                 loadSong(allSongs[songIndex]);
                 playSong();
