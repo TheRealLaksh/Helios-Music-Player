@@ -67,7 +67,6 @@ const playlists = [
             { name: 'daaku', displayName: 'Daaku', artist: 'Badshah, Sharvi Yadav, Hiten', cover: 'daaku' },
             { name: 'darji', displayName: 'Darji', artist: 'Prabh Singh & Rooh Sandhu', cover: 'darji' },
             { name: 'excuses', displayName: 'Excuses', artist: 'AP Dhillon, Gurinder Gill, Intense', cover: 'excuses' },
-            { name: 'goddamn', displayName: 'God Damn', artist: 'Badshah, Karan Aujla, Hiten', cover: 'goddamn' },
             { name: 'loveya', displayName: 'Love Ya', artist: 'Karan Aujla', cover: 'loveya' },
             { name: 'magic', displayName: 'Magic', artist: 'AP Dhillon', cover: 'magic' },
             { name: 'millionaire', displayName: 'Millionaire', artist: 'Yo Yo Honey Singh, Simar Kaur, Singhsta', cover: 'millionaire' },
