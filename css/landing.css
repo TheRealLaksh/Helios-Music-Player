@@ -5,7 +5,7 @@
      --bg-color: #050505;
      /* Darker background for more contrast */
      --text-primary: #FFFFFF;
-     --text-secondary: #adb2b3;
+     --text-secondary: #fcfcfc;
  }
 
  * {
@@ -75,7 +75,7 @@
  .tagline {
      font-size: 1.25rem;
      font-weight: 300;
-     color: var(--text-secondary);
+     color: #9c9b9b;
      margin-bottom: 2.5rem;
      max-width: 400px;
  }
