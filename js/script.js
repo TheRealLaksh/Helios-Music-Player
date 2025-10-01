@@ -57,27 +57,26 @@ const playlists = [
     {
         name: 'Punjabi ',
         songs: [
-            { name: '3peg', displayName: '3 Peg', artist: 'Sharry Mann', cover: '3peg' }, 
-            { name: '945', displayName: '9:45', artist: 'Prabh Singh, Jay Trak, Rooh Sandhu', cover: '945' }, 
-            { name: 'admirinyou', displayName: 'Admirin\' You', artist: 'Karan Aujla', cover: 'admirinyou' }, 
-            { name: 'baawe', displayName: 'Baawe', artist: 'AP Dhillon', cover: 'baawe' }, 
-            { name: 'bemine', displayName: 'Be Mine', artist: 'AP Dhillon', cover: 'bemine' }, 
-            { name: 'daaku', displayName: 'Daaku', artist: 'Badshah, Sharvi Yadav, Hiten', cover: 'daaku' }, 
-            { name: 'darji', displayName: 'Darji', artist: 'Prabh Singh & Rooh Sandhu', cover: 'darji' }, 
-            { name: 'excuses', displayName: 'Excuses', artist: 'AP Dhillon, Gurinder Gill, Intense', cover: 'excuses' }, 
-            { name: 'loveya', displayName: 'Love Ya', artist: 'Karan Aujla', cover: 'loveya' }, 
-            { name: 'magic', displayName: 'Magic', artist: 'AP Dhillon', cover: 'magic' }, 
-            { name: 'millionaire', displayName: 'Millionaire', artist: 'Yo Yo Honey Singh, Simar Kaur, Singhsta', cover: 'millionaire' }, 
-            { name: 'obsessed', displayName: 'Obsessed', artist: 'Riar Saab, Abhijay Sharma', cover: 'obsessed' }, 
-            { name: 'oldmoney', displayName: 'Old Money', artist: 'Karan Aujla, Ikky', cover: 'oldmoney' }, 
-            { name: 'stfu', displayName: 'STFU', artist: 'Karan Aujla, Yeah Proof', cover: 'stfu' }, 
-            { name: 'thodisidaaru', displayName: 'Thodi Si Daaru', artist: 'AP Dhillon & Shreya Ghoshal', cover: 'thodisidaaru' }, 
-            { name: 'toxic', displayName: 'Toxic', artist: 'AP Dhillon, Gurinder Gill, Gminxr', cover: 'toxic' }, 
-            { name: 'truestories', displayName: 'True Stories', artist: 'AP Dhillon, Gurinder Gill, Intense', cover: 'truestories' }, 
-            { name: 'uddaapunjab', displayName: 'Ud Daa Punjab', artist: 'Amit Trivedi', cover: 'uddaapunjab' }, 
-            { name: 'withyou', displayName: 'With You', artist: 'AP Dhillon', cover: 'withyou' }, 
+            { name: '3peg', displayName: '3 Peg', artist: 'Sharry Mann', cover: '3peg' },
+            { name: '945', displayName: '9:45', artist: 'Prabh Singh, Jay Trak, Rooh Sandhu', cover: '945' },
+            { name: 'admirinyou', displayName: 'Admirin\' You', artist: 'Karan Aujla', cover: 'admirinyou' },
+            { name: 'baawe', displayName: 'Baawe', artist: 'AP Dhillon', cover: 'baawe' },
+            { name: 'bemine', displayName: 'Be Mine', artist: 'AP Dhillon', cover: 'bemine' },
+            { name: 'daaku', displayName: 'Daaku', artist: 'Badshah, Sharvi Yadav, Hiten', cover: 'daaku' },
+            { name: 'darji', displayName: 'Darji', artist: 'Prabh Singh & Rooh Sandhu', cover: 'darji' },
+            { name: 'excuses', displayName: 'Excuses', artist: 'AP Dhillon, Gurinder Gill, Intense', cover: 'excuses' },
+            { name: 'loveya', displayName: 'Love Ya', artist: 'Karan Aujla', cover: 'loveya' },
+            { name: 'magic', displayName: 'Magic', artist: 'AP Dhillon', cover: 'magic' },
+            { name: 'millionaire', displayName: 'Millionaire', artist: 'Yo Yo Honey Singh, Simar Kaur, Singhsta', cover: 'millionaire' },
+            { name: 'obsessed', displayName: 'Obsessed', artist: 'Riar Saab, Abhijay Sharma', cover: 'obsessed' },
+            { name: 'oldmoney', displayName: 'Old Money', artist: 'Karan Aujla, Ikky', cover: 'oldmoney' },
+            { name: 'stfu', displayName: 'STFU', artist: 'Karan Aujla, Yeah Proof', cover: 'stfu' },
+            { name: 'thodisidaaru', displayName: 'Thodi Si Daaru', artist: 'AP Dhillon & Shreya Ghoshal', cover: 'thodisidaaru' },
+            { name: 'toxic', displayName: 'Toxic', artist: 'AP Dhillon, Gurinder Gill, Gminxr', cover: 'toxic' },
+            { name: 'truestories', displayName: 'True Stories', artist: 'AP Dhillon, Gurinder Gill, Intense', cover: 'truestories' },
+            { name: 'uddaapunjab', displayName: 'Ud Daa Punjab', artist: 'Amit Trivedi', cover: 'uddaapunjab' },
+            { name: 'withyou', displayName: 'With You', artist: 'AP Dhillon', cover: 'withyou' },
         ]
-
     },
     {
         name: 'Hindi ',
@@ -89,44 +88,32 @@ const playlists = [
     }
 ];
 
-// --- Create a single, flat array of all songs for playback logic ---
 const allSongs = playlists.flatMap(p => p.songs);
-
-// --- Dynamically generate color presets ---
 const colorPresets = allSongs.map(song => {
     let hash = 0;
-    for (let i = 0; i < song.name.length; i++) {
-        hash = song.name.charCodeAt(i) + ((hash << 5) - hash);
-    }
+    for (let i = 0; i < song.name.length; i++) { hash = song.name.charCodeAt(i) + ((hash << 5) - hash); }
     const color1 = (hash & 0x00FFFFFF).toString(16).toUpperCase();
     const color2 = ((hash >> 8) & 0x00FFFFFF).toString(16).toUpperCase();
     const aurora1 = "#" + "00000".substring(0, 6 - color1.length) + color1;
     const aurora2 = "#" + "00000".substring(0, 6 - color2.length) + color2;
-    return { aurora: [aurora1, aurora2], vinyl: [aurora1, '#222'], vortex: parseInt(color1.replace('#', ''), 16) };
+    return { aurora: [aurora1, aurora2], vinyl: [aurora1, '#222'], vortex: parseInt(color1.replace('#',''), 16) };
 });
 
-// --- State Management ---
 let isPlaying = false;
 let songIndex = 0;
 let isShuffle = false;
 let isRepeat = false;
 let activeBackground = 'off';
+let currentPlaylist = null; // NEW: To track the active playlist for shuffle
 let audioContext, analyser;
 let scene, camera, renderer, lines;
 
-// --- Highlight Function ---
 function highlightCurrentSong() {
-    const playlistItems = document.querySelectorAll('#playlist li');
-    playlistItems.forEach(item => {
-        item.classList.remove('playing');
-    });
+    document.querySelectorAll('#playlist li').forEach(item => item.classList.remove('playing'));
     const currentSongItem = document.querySelector(`#playlist li[data-index='${songIndex}']`);
-    if (currentSongItem) {
-        currentSongItem.classList.add('playing');
-    }
+    if (currentSongItem) currentSongItem.classList.add('playing');
 }
 
-// --- Core Functions ---
 function loadSong(song) {
     title.textContent = song.displayName;
     artist.textContent = song.artist;
@@ -156,43 +143,53 @@ function pauseSong() {
     if (vinylSVG) vinylSVG.classList.remove('playing');
 }
 
+function findPlaylistForSong(globalIndex) {
+    let songCounter = 0;
+    for (const playlist of playlists) {
+        if (globalIndex < songCounter + playlist.songs.length) {
+            return playlist;
+        }
+        songCounter += playlist.songs.length;
+    }
+    return null;
+}
+
 function prevSong() {
     songIndex--;
     if (songIndex < 0) { songIndex = allSongs.length - 1; }
+    currentPlaylist = findPlaylistForSong(songIndex); // Update playlist context
     loadSong(allSongs[songIndex]);
     playSong();
 }
 
 function nextSong() {
     if (isShuffle) {
-        let r;
-        do { r = Math.floor(Math.random() * allSongs.length); } while (r === songIndex);
-        songIndex = r;
+        // Ensure there is a current playlist context for shuffling
+        if (!currentPlaylist) {
+            currentPlaylist = findPlaylistForSong(songIndex) || playlists[0];
+        }
+
+        const currentSongInPlaylistIndex = currentPlaylist.songs.findIndex(s => s.name === allSongs[songIndex].name);
+        let randomIndexInPlaylist;
+        
+        do {
+            randomIndexInPlaylist = Math.floor(Math.random() * currentPlaylist.songs.length);
+        } while (currentPlaylist.songs.length > 1 && randomIndexInPlaylist === currentSongInPlaylistIndex);
+        
+        const nextShuffledSong = currentPlaylist.songs[randomIndexInPlaylist];
+        songIndex = allSongs.findIndex(s => s.name === nextShuffledSong.name);
+
     } else {
         songIndex++;
         if (songIndex > allSongs.length - 1) { songIndex = 0; }
+        currentPlaylist = findPlaylistForSong(songIndex); // Update playlist context
     }
     loadSong(allSongs[songIndex]);
     playSong();
 }
 
-function updateProgress(e) {
-    if (isPlaying && !isNaN(audio.duration)) {
-        const { duration, currentTime } = e.srcElement;
-        const p = (currentTime / duration) * 100;
-        progress.style.width = `${p}%`;
-        const f = (t) => String(Math.floor(t)).padStart(2, '0');
-        const dM = Math.floor(duration / 60);
-        const dS = f(duration % 60);
-        durationEl.textContent = `${dM}:${dS}`;
-        const cM = Math.floor(currentTime / 60);
-        const cS = f(currentTime % 60);
-        currentTimeEl.textContent = `${cM}:${cS}`;
-    }
-}
-
+function updateProgress(e) { if (isPlaying && !isNaN(audio.duration)) { const { duration, currentTime } = e.srcElement; const p = (currentTime / duration) * 100; progress.style.width = `${p}%`; const f = (t) => String(Math.floor(t)).padStart(2, '0'); const dM = Math.floor(duration / 60); const dS = f(duration % 60); durationEl.textContent = `${dM}:${dS}`; const cM = Math.floor(currentTime / 60); const cS = f(currentTime % 60); currentTimeEl.textContent = `${cM}:${cS}`; } }
 function setProgress(e) { const w = this.clientWidth; const cX = e.offsetX; const { duration } = audio; audio.currentTime = (cX / w) * duration; }
-
 function setVolume() { audio.volume = volumeSlider.value; }
 
 function generatePlaylist() {
@@ -209,7 +206,9 @@ function generatePlaylist() {
             li.textContent = `${song.displayName} - ${song.artist}`;
             const songIndexInAllSongs = allSongs.findIndex(s => s.name === song.name);
             li.setAttribute('data-index', songIndexInAllSongs);
+            
             li.addEventListener('click', () => {
+                currentPlaylist = playlist; // CRITICAL: Set the current playlist on click
                 songIndex = songIndexInAllSongs;
                 loadSong(allSongs[songIndex]);
                 playSong();
@@ -292,7 +291,6 @@ function initVortex() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     lines = [];
     const lineCount = 100, radius = 5;
-    // THIS IS THE CORRECTED LINE
     for (let i = 0; i < lineCount; i++) {
         const geometry = new THREE.BufferGeometry();
         const vertices = new Float32Array([-1000, 0, 0, 1000, 0, 0]);
@@ -331,7 +329,6 @@ settingOptions.forEach(option => {
     });
 });
 
-// --- Event Listeners ---
 playBtn.addEventListener('click', () => { if (!audioContext) { setupPlayerVisualizer(); } isPlaying ? pauseSong() : playSong(); });
 settingsToggle.addEventListener('click', toggleSettingsPanel);
 settingsClose.addEventListener('click', toggleSettingsPanel);
