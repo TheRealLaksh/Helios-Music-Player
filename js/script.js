@@ -29,6 +29,7 @@ const auroraBg = document.getElementById('aurora-bg');
 const vinylBg = document.getElementById('vinyl-bg');
 const vortexCanvas = document.getElementById('vortex-canvas');
 
+// --- Playlist (41 songs) ---
 const songs = [
     { name: '3peg', displayName: '3 Peg', artist: 'Sharry Mann', cover: '3peg' },
     { name: '945', displayName: '9:45', artist: 'Prabh Singh, Jay Trak, Rooh Sandhu', cover: '945' },
@@ -72,7 +73,7 @@ const songs = [
     { name: 'youngblood', displayName: 'Youngblood', artist: '5 Seconds of Summer', cover: 'youngblood' }
 ];
 
-// --- Color Presets (UPDATED with new colors) ---
+// --- Color Presets ---
 const colorPresets = [
     { aurora: ['#f2994a', '#f2c94c'], vinyl: ['#f2994a', '#333'], vortex: 0xf2994a }, // 3peg
     { aurora: ['#00c6ff', '#0072ff'], vinyl: ['#00c6ff', '#222'], vortex: 0x00c6ff }, // 945
@@ -123,9 +124,19 @@ let isShuffle = false;
 let isRepeat = false;
 let activeBackground = 'off';
 let audioContext, analyser;
-
-// --- Three.js (Vortex) Variables ---
 let scene, camera, renderer, lines;
+
+// --- Highlight Function ---
+function highlightCurrentSong() {
+    const playlistItems = document.querySelectorAll('#playlist li');
+    playlistItems.forEach(item => {
+        item.classList.remove('playing');
+    });
+    const currentSongItem = document.querySelector(`#playlist li[data-index='${songIndex}']`);
+    if (currentSongItem) {
+        currentSongItem.classList.add('playing');
+    }
+}
 
 // --- Core Functions ---
 function loadSong(song) {
@@ -134,7 +145,7 @@ function loadSong(song) {
     audio.src = `assets/music/${song.name}.mp3`;
     albumArt.src = `assets/images/${song.cover}.jpg`;
     updateActiveBackground();
-    highlightCurrentSong(); // ADD THIS LINE
+    highlightCurrentSong();
 }
 
 function playSong() {
@@ -185,11 +196,11 @@ function setProgress(e) { const w = this.clientWidth; const cX = e.offsetX; cons
 function setVolume() { audio.volume = volumeSlider.value; }
 
 function generatePlaylist() {
-    playlistEl.innerHTML = ''; // Clear existing playlist
+    playlistEl.innerHTML = '';
     songs.forEach((song, i) => { 
         const li = document.createElement('li'); 
         li.textContent = `${song.displayName} - ${song.artist}`; 
-        li.setAttribute('data-index', i); // ADD THIS LINE
+        li.setAttribute('data-index', i);
         li.addEventListener('click', () => { 
             songIndex = i; 
             loadSong(songs[songIndex]); 
@@ -199,24 +210,10 @@ function generatePlaylist() {
     }); 
 }
 
-function highlightCurrentSong() {
-    const playlistItems = document.querySelectorAll('#playlist li');
-    playlistItems.forEach(item => {
-        item.classList.remove('playing');
-    });
-    const currentSongItem = document.querySelector(`#playlist li[data-index='${songIndex}']`);
-    if (currentSongItem) {
-        currentSongItem.classList.add('playing');
-    }
-}
 function togglePlaylist() { settingsPanel.classList.remove('show'); playlistPanel.classList.toggle('show'); }
-
 function toggleSettingsPanel() { playlistPanel.classList.remove('show'); settingsPanel.classList.toggle('show'); }
-
 function toggleShuffle() { isShuffle = !isShuffle; shuffleBtn.classList.toggle('active', isShuffle); }
-
 function toggleRepeat() { isRepeat = !isRepeat; repeatBtn.classList.toggle('active', isRepeat); }
-
 function handleSongEnd() { if (isRepeat) { audio.currentTime = 0; playSong(); } else { nextSong(); } }
 
 function setupPlayerVisualizer() {
@@ -253,9 +250,7 @@ function updateActiveBackground() {
     auroraBg.classList.remove('active');
     vinylBg.classList.remove('active');
     vortexCanvas.classList.remove('active');
-
     const colors = colorPresets[songIndex];
-
     switch (activeBackground) {
         case 'aurora':
             auroraBg.style.setProperty('--aurora1', colors.aurora[0]);
@@ -263,18 +258,7 @@ function updateActiveBackground() {
             auroraBg.classList.add('active');
             break;
         case 'vinyl':
-            vinylBg.innerHTML = `
-                <svg id="vinyl-svg" class="${isPlaying ? 'playing' : ''}" viewBox="0 0 400 400">
-                    <defs>
-                        <radialGradient id="grad${songIndex}" cx="50%" cy="50%" r="50%">
-                            <stop offset="0%" stop-color="${colors.vinyl[0]}" />
-                            <stop offset="100%" stop-color="${colors.vinyl[1]}" />
-                        </radialGradient>
-                    </defs>
-                    <circle cx="200" cy="200" r="200" fill="url(#grad${songIndex})"/>
-                    <circle cx="200" cy="200" r="180" fill="#121212"/>
-                    <circle cx="200" cy="200" r="60" fill="url(#grad${songIndex})"/>
-                </svg>`;
+            vinylBg.innerHTML = `<svg id="vinyl-svg" class="${isPlaying ? 'playing' : ''}" viewBox="0 0 400 400"><defs><radialGradient id="grad${songIndex}" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="${colors.vinyl[0]}" /><stop offset="100%" stop-color="${colors.vinyl[1]}" /></radialGradient></defs><circle cx="200" cy="200" r="200" fill="url(#grad${songIndex})"/><circle cx="200" cy="200" r="180" fill="#121212"/><circle cx="200" cy="200" r="60" fill="url(#grad${songIndex})"/></svg>`;
             vinylBg.classList.add('active');
             break;
         case 'vortex':
@@ -294,10 +278,9 @@ function initVortex() {
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     renderer = new THREE.WebGLRenderer({ canvas: vortexCanvas, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-
     lines = [];
     const lineCount = 100, radius = 5;
-    for (let i = 0; i < lineContent; i++) {
+    for (let i = 0; i < lineCount; i++) {
         const geometry = new THREE.BufferGeometry();
         const vertices = new Float32Array([-1000, 0, 0, 1000, 0, 0]);
         geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
@@ -310,7 +293,6 @@ function initVortex() {
         lines.push(line);
     }
     camera.position.z = -5;
-
     function animate() {
         requestAnimationFrame(animate);
         if (activeBackground !== 'vortex') return;
