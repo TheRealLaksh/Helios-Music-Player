@@ -29,7 +29,7 @@ const auroraBg = document.getElementById('aurora-bg');
 const vinylBg = document.getElementById('vinyl-bg');
 const vortexCanvas = document.getElementById('vortex-canvas');
 
-// --- Playlist (41 songs) ---
+// --- FINAL Playlist ---
 const songs = [
     { name: '3peg', displayName: '3 Peg', artist: 'Sharry Mann', cover: '3peg' },
     { name: '945', displayName: '9:45', artist: 'Prabh Singh, Jay Trak, Rooh Sandhu', cover: '945' },
@@ -73,7 +73,7 @@ const songs = [
     { name: 'youngblood', displayName: 'Youngblood', artist: '5 Seconds of Summer', cover: 'youngblood' }
 ];
 
-// --- Color Presets ---
+// --- FINAL Color Presets ---
 const colorPresets = [
     { aurora: ['#f2994a', '#f2c94c'], vinyl: ['#f2994a', '#333'], vortex: 0xf2994a }, // 3peg
     { aurora: ['#00c6ff', '#0072ff'], vinyl: ['#00c6ff', '#222'], vortex: 0x00c6ff }, // 945
@@ -116,6 +116,7 @@ const colorPresets = [
     { aurora: ['#83a4d4', '#b6fbff'], vinyl: ['#83a4d4', '#444'], vortex: 0x83a4d4 }, // withyou
     { aurora: ['#D4145A', '#FBB03B'], vinyl: ['#D4145A', '#222'], vortex: 0xD4145A }  // youngblood
 ];
+
 
 // --- State Management ---
 let isPlaying = false;
