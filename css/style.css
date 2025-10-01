@@ -453,3 +453,36 @@ input[type="range"]::-webkit-slider-thumb {
 .playlist-group ul li {
     border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
+
+/* --- Custom Scrollbar Styles --- */
+
+/* Works on Firefox */
+#playlist {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) transparent;
+}
+
+/* Works on Chrome, Edge, and Safari */
+#playlist::-webkit-scrollbar {
+    width: 8px;
+    /* Width of the scrollbar */
+}
+
+#playlist::-webkit-scrollbar-track {
+    background: transparent;
+    /* Make the track invisible */
+}
+
+#playlist::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    /* Color of the scroll thumb */
+    border-radius: 10px;
+    /* Rounded corners for the thumb */
+    border: 2px solid var(--surface-color);
+    /* Creates a nice padding effect */
+}
+
+#playlist::-webkit-scrollbar-thumb:hover {
+    background-color: #1ed760;
+    /* A slightly brighter green on hover */
+}
