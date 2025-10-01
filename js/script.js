@@ -57,27 +57,27 @@ const playlists = [
     {
         name: 'Punjabi ',
         songs: [
-            { name: '3peg', displayName: '3 Peg', artist: 'Sharry Mann', cover: '3peg' },
-            { name: '945', displayName: '9:45', artist: 'Prabh Singh, Jay Trak, Rooh Sandhu', cover: '945' },
-            { name: 'admirinyou', displayName: 'Admirin\' You', artist: 'Karan Aujla', cover: 'admirinyou' },
-            { name: 'baawe', displayName: 'Baawe', artist: 'AP Dhillon', cover: 'baawe' },
-            { name: 'bemine', displayName: 'Be Mine', artist: 'AP Dhillon', cover: 'bemine' },
-            { name: 'daaku', displayName: 'Daaku', artist: 'Badshah, Sharvi Yadav, Hiten', cover: 'daaku' },
-            { name: 'darji', displayName: 'Darji', artist: 'Prabh Singh & Rooh Sandhu', cover: 'darji' },
-            { name: 'excuses', displayName: 'Excuses', artist: 'AP Dhillon, Gurinder Gill', cover: 'excuses' },
-            { name: 'goddamn', displayName: 'God Damn', artist: 'Badshah, Karan Aujla, Hiten', cover: 'goddamn' },
-            { name: 'loveya', displayName: 'Love Ya', artist: 'Karan Aujla', cover: 'loveya' },
-            { name: 'magic', displayName: 'Magic', artist: 'AP Dhillon', cover: 'magic' },
-            { name: 'millionaire', displayName: 'Millionaire', artist: 'Yo Yo Honey Singh, Simar Kaur', cover: 'millionaire' },
-            { name: 'obsessed', displayName: 'Obsessed', artist: 'Riar Saab, Abhijay Sharma', cover: 'obsessed' },
-            { name: 'oldmoney', displayName: 'Old Money', artist: 'Karan Aujla', cover: 'oldmoney' },
-            { name: 'stfu', displayName: 'STFU', artist: 'Karan Aujla', cover: 'stfu' },
-            { name: 'thodisidaaru', displayName: 'Thodi Si Daaru', artist: 'AP Dhillon & Shreya Ghoshal', cover: 'thodisidaaru' },
-            { name: 'toxic', displayName: 'Toxic', artist: 'AP Dhillon, Gurinder Gill', cover: 'toxic' },
-            { name: 'truestories', displayName: 'True Stories', artist: 'AP Dhillon, Gurinder Gill', cover: 'truestories' },
-            { name: 'uddaapunjab', displayName: 'Ud Daa Punjab', artist: 'Diljit Dosanjh', cover: 'uddaapunjab' },
-            { name: 'withyou', displayName: 'With You', artist: 'AP Dhillon', cover: 'withyou' },
+            { name: '3peg', displayName: '3 Peg', artist: 'Sharry Mann', cover: '3peg' }, 
+            { name: '945', displayName: '9:45', artist: 'Prabh Singh, Jay Trak, Rooh Sandhu', cover: '945' }, 
+            { name: 'admirinyou', displayName: 'Admirin\' You', artist: 'Karan Aujla', cover: 'admirinyou' }, 
+            { name: 'baawe', displayName: 'Baawe', artist: 'AP Dhillon', cover: 'baawe' }, 
+            { name: 'bemine', displayName: 'Be Mine', artist: 'AP Dhillon', cover: 'bemine' }, 
+            { name: 'daaku', displayName: 'Daaku', artist: 'Badshah, Sharvi Yadav, Hiten', cover: 'daaku' }, 
+            { name: 'darji', displayName: 'Darji', artist: 'Prabh Singh & Rooh Sandhu', cover: 'darji' }, 
+            { name: 'excuses', displayName: 'Excuses', artist: 'AP Dhillon, Gurinder Gill, Intense', cover: 'excuses' }, 
+            { name: 'loveya', displayName: 'Love Ya', artist: 'Karan Aujla', cover: 'loveya' }, 
+            { name: 'magic', displayName: 'Magic', artist: 'AP Dhillon', cover: 'magic' }, 
+            { name: 'millionaire', displayName: 'Millionaire', artist: 'Yo Yo Honey Singh, Simar Kaur, Singhsta', cover: 'millionaire' }, 
+            { name: 'obsessed', displayName: 'Obsessed', artist: 'Riar Saab, Abhijay Sharma', cover: 'obsessed' }, 
+            { name: 'oldmoney', displayName: 'Old Money', artist: 'Karan Aujla, Ikky', cover: 'oldmoney' }, 
+            { name: 'stfu', displayName: 'STFU', artist: 'Karan Aujla, Yeah Proof', cover: 'stfu' }, 
+            { name: 'thodisidaaru', displayName: 'Thodi Si Daaru', artist: 'AP Dhillon & Shreya Ghoshal', cover: 'thodisidaaru' }, 
+            { name: 'toxic', displayName: 'Toxic', artist: 'AP Dhillon, Gurinder Gill, Gminxr', cover: 'toxic' }, 
+            { name: 'truestories', displayName: 'True Stories', artist: 'AP Dhillon, Gurinder Gill, Intense', cover: 'truestories' }, 
+            { name: 'uddaapunjab', displayName: 'Ud Daa Punjab', artist: 'Amit Trivedi', cover: 'uddaapunjab' }, 
+            { name: 'withyou', displayName: 'With You', artist: 'AP Dhillon', cover: 'withyou' }, 
         ]
+
     },
     {
         name: 'Hindi ',
@@ -102,7 +102,7 @@ const colorPresets = allSongs.map(song => {
     const color2 = ((hash >> 8) & 0x00FFFFFF).toString(16).toUpperCase();
     const aurora1 = "#" + "00000".substring(0, 6 - color1.length) + color1;
     const aurora2 = "#" + "00000".substring(0, 6 - color2.length) + color2;
-    return { aurora: [aurora1, aurora2], vinyl: [aurora1, '#222'], vortex: parseInt(color1.replace('#',''), 16) };
+    return { aurora: [aurora1, aurora2], vinyl: [aurora1, '#222'], vortex: parseInt(color1.replace('#', ''), 16) };
 });
 
 // --- State Management ---
