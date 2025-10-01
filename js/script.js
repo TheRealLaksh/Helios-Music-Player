@@ -31,20 +31,37 @@ const vortexCanvas = document.getElementById('vortex-canvas');
 
 // --- Playlist ---
 const songs = [
-    { name: 'youngblood', displayName: 'Youngblood', artist: '5 Seconds of Summer', cover: 'youngblood' },
+    { name: 'band4band', displayName: 'Band4Band', artist: 'Central Cee & Lil Baby', cover: 'band4band' },
+    { name: 'darji', displayName: 'Darji', artist: 'Prabh Singh & Rooh Sandhu', cover: 'darji' },
+    { name: 'doja', displayName: 'Doja', artist: 'Central Cee', cover: 'doja' },
+    { name: 'donteventext', displayName: 'Don\'t Even Text', artist: 'Tsumyoki & Ginni', cover: 'donteventext' },
+    { name: 'dtmf', displayName: 'DTMF', artist: 'Bad Bunny', cover: 'dtmf' },
+    { name: 'farebi', displayName: 'Farebi', artist: 'Chaar Diwaari & Raftaar', cover: 'farebi' },
     { name: 'godsplan', displayName: 'God\'s Plan', artist: 'Drake', cover: 'godsplan' },
-    { name: 'donteventext', displayName: 'Don\'t Even Text', artist: 'Tsumyoki, Ginni', cover: 'donteventext' },
-    { name: 'darji', displayName: 'Darji', artist: 'Prabh Singh, Rooh Sandhu', cover: 'darji' },
-    { name: 'paro', displayName: 'Paro', artist: 'Aditya Rikhari', cover: 'paro' }
+    { name: 'ordinary', displayName: 'Ordinary', artist: 'Alex Warren', cover: 'ordinary' },
+    { name: 'paro', displayName: 'Paro', artist: 'Aditya Rikhari', cover: 'paro' },
+    { name: 'sprinter', displayName: 'Sprinter', artist: 'Dave & Central Cee', cover: 'sprinter' },
+    { name: 'thodisidaaru', displayName: 'Thodi Si Daaru', artist: 'AP Dhillon & Shreya Ghoshal', cover: 'thodisidaaru' },
+    { name: 'thriftshop', displayName: 'Thrift Shop', artist: 'Macklemore & Ryan Lewis', cover: 'thriftshop' },
+    { name: 'whichone', displayName: 'Which One', artist: 'Drake & Central Cee', cover: 'whichone' },
+    { name: 'youngblood', displayName: 'Youngblood', artist: '5 Seconds of Summer', cover: 'youngblood' }
 ];
-
 // --- Color Presets for Backgrounds ---
 const colorPresets = [
-    { aurora: ['#D4145A', '#FBB03B'], vinyl: ['#D4145A', '#222'], vortex: 0xD4145A },
-    { aurora: ['#8E2DE2', '#4A00E0'], vinyl: ['#8E2DE2', '#333'], vortex: 0x8E2DE2 },
-    { aurora: ['#F7971E', '#FFD200'], vinyl: ['#F7971E', '#444'], vortex: 0xF7971E },
-    { aurora: ['#00C9FF', '#92FE9D'], vinyl: ['#00C9FF', '#282828'], vortex: 0x00C9FF },
-    { aurora: ['#1D2B64', '#F8CDDA'], vinyl: ['#F8CDDA', '#1D2B64'], vortex: 0xF8CDDA }
+    { aurora: ['#2c3e50', '#fd746c'], vinyl: ['#fd746c', '#2c3e50'], vortex: 0xfd746c }, // band4band
+    { aurora: ['#00C9FF', '#92FE9D'], vinyl: ['#00C9FF', '#282828'], vortex: 0x00C9FF }, // darji
+    { aurora: ['#e96443', '#904e95'], vinyl: ['#e96443', '#333'], vortex: 0xe96443 }, // doja
+    { aurora: ['#F7971E', '#FFD200'], vinyl: ['#F7971E', '#444'], vortex: 0xF7971E }, // donteventext
+    { aurora: ['#1c92d2', '#f2fcfe'], vinyl: ['#1c92d2', '#333'], vortex: 0x1c92d2 }, // dtmf
+    { aurora: ['#ff4b1f', '#1fddff'], vinyl: ['#ff4b1f', '#222'], vortex: 0xff4b1f }, // farebi
+    { aurora: ['#8E2DE2', '#4A00E0'], vinyl: ['#8E2DE2', '#333'], vortex: 0x8E2DE2 }, // godsplan
+    { aurora: ['#a1c4fd', '#c2e9fb'], vinyl: ['#a1c4fd', '#444'], vortex: 0xa1c4fd }, // ordinary
+    { aurora: ['#1D2B64', '#F8CDDA'], vinyl: ['#F8CDDA', '#1D2B64'], vortex: 0xF8CDDA }, // paro
+    { aurora: ['#007991', '#78ffd6'], vinyl: ['#007991', '#222'], vortex: 0x007991 }, // sprinter
+    { aurora: ['#cb2d3e', '#ef473a'], vinyl: ['#cb2d3e', '#333'], vortex: 0xcb2d3e }, // thodisidaaru
+    { aurora: ['#134E5E', '#71B280'], vinyl: ['#71B280', '#134E5E'], vortex: 0x71B280 }, // thriftshop
+    { aurora: ['#3a6186', '#89253e'], vinyl: ['#89253e', '#3a6186'], vortex: 0x89253e }, // whichone
+    { aurora: ['#D4145A', '#FBB03B'], vinyl: ['#D4145A', '#222'], vortex: 0xD4145A }  // youngblood
 ];
 
 // --- State Management ---
