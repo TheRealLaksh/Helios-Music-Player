@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,26 +10,29 @@
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
+
 <body>
-    <!-- Backgrounds -->
     <div id="album-art-bg" class="background-container"></div>
     <div id="aurora-bg" class="background-container"></div>
     <div id="vinyl-bg" class="background-container"></div>
     <canvas id="vortex-canvas" class="background-container"></canvas>
 
-    <!-- Main Site Wrapper for Layout -->
     <div class="site-wrapper">
-        
-        <!-- Search Bar and Suggestions -->
-        <div class="search-wrapper">
-            <div class="search-container">
-                <i class="ph ph-magnifying-glass"></i>
-                <input type="text" id="search-input" placeholder="Search for songs or artists..." autocomplete="off">
+
+        <div class="left-sidebar">
+            <div class="search-wrapper">
+                <div class="search-container">
+                    <i class="ph ph-magnifying-glass"></i>
+                    <input type="text" id="search-input" placeholder="Search for songs or artists..." autocomplete="off">
+                </div>
+                <ul id="search-suggestions"></ul>
             </div>
-            <ul id="search-suggestions"></ul>
+            <a href="index.html" id="home-button">
+                <i class="ph ph-house"></i>
+                <span>Home</span>
+            </a>
         </div>
 
-        <!-- Main App Container -->
         <div class="app-container">
             <main class="player">
                 <header class="player-header">
@@ -49,7 +53,7 @@
                     <h2 id="title">Song Title</h2>
                     <h3 id="artist">Artist Name</h3>
                 </div>
-                
+
                 <audio id="audio" src=""></audio>
 
                 <div class="progress-container" id="progress-container">
@@ -67,7 +71,7 @@
                     <button id="next" class="action-btn"><i class="ph ph-skip-forward"></i></button>
                     <button class="action-btn" id="repeat-btn"><i class="ph ph-repeat"></i></button>
                 </div>
-                
+
                 <canvas id="visualizer"></canvas>
 
                 <div class="volume-container">
@@ -76,34 +80,32 @@
                     <i class="ph ph-speaker-simple-high"></i>
                 </div>
             </main>
-            
-            <aside class="playlist-panel">
-                <div class="playlist-header">
-                    <h3>Playlist</h3>
-                    <button class="action-btn" id="playlist-close"><i class="ph ph-x"></i></button>
-                </div>
-                <ul id="playlist"></ul>
-            </aside>
-
-            <aside class="settings-panel">
-                <div class="settings-header">
-                    <h3>Background Style</h3>
-                    <button class="action-btn" id="settings-close"><i class="ph ph-x"></i></button>
-                </div>
-                <div class="settings-options">
-                    <button class="setting-option" data-bg="aurora">Aurora</button>
-                    <button class="setting-option" data-bg="vinyl">Vinyl</button>
-                    <button class="setting-option" data-bg="vortex">Vortex</button>
-                    <button class="setting-option active" data-bg="off">Off (Album Art)</button>
-                </div>
-            </aside>
         </div>
 
-        <a href="index.html" id="home-button">
-            <i class="ph ph-house"></i>
-        </a>
+        <aside class="playlist-panel">
+            <div class="playlist-header">
+                <h3>Playlist</h3>
+                <button class="action-btn" id="playlist-close"><i class="ph ph-x"></i></button>
+            </div>
+            <ul id="playlist"></ul>
+        </aside>
+
+        <aside class="settings-panel">
+            <div class="settings-header">
+                <h3>Background Style</h3>
+                <button class="action-btn" id="settings-close"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="settings-options">
+                <button class="setting-option" data-bg="aurora">Aurora</button>
+                <button class="setting-option" data-bg="vinyl">Vinyl</button>
+                <button class="setting-option" data-bg="vortex">Vortex</button>
+                <button class="setting-option active" data-bg="off">Off (Album Art)</button>
+            </div>
+        </aside>
+        
     </div>
 
     <script src="js/script.js" defer></script>
 </body>
+
 </html>

@@ -200,14 +200,32 @@ function setVolume() { audio.volume = volumeSlider.value; }
 function generatePlaylist() {
     playlistEl.innerHTML = '';
     playlists.forEach(p => {
-        const details = document.createElement('details'); details.className = 'playlist-group';
-        const summary = document.createElement('summary'); summary.textContent = p.name; details.appendChild(summary);
+        const details = document.createElement('details');
+        details.className = 'playlist-group';
+        const summary = document.createElement('summary');
+        summary.textContent = p.name;
+        details.appendChild(summary);
         const ul = document.createElement('ul');
         p.songs.forEach(song => {
-            const li = document.createElement('li'); li.textContent = `${song.displayName} - ${song.artist}`;
+            const li = document.createElement('li');
             const idx = allSongs.findIndex(s => s.name === song.name);
             li.dataset.index = idx;
-            li.addEventListener('click', () => { currentPlaylist = p; songIndex = idx; loadSong(allSongs[songIndex]); playSong(); });
+
+            // This is the new part that adds the image and structured text
+            li.innerHTML = `
+                <img src="Assets/images/${song.cover}.jpg" alt="${song.displayName}" class="playlist-item-cover">
+                <div class="playlist-item-details">
+                    <strong>${song.displayName}</strong>
+                    <span>${song.artist}</span>
+                </div>
+            `;
+
+            li.addEventListener('click', () => {
+                currentPlaylist = p;
+                songIndex = idx;
+                loadSong(allSongs[songIndex]);
+                playSong();
+            });
             ul.appendChild(li);
         });
         details.appendChild(ul);
