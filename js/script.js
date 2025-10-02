@@ -133,6 +133,7 @@ const colorPresets = allSongs.map(song => {
 
 let isPlaying = false;
 let songIndex = 0;
+let lastVolume = 1;
 let isShuffle = false;
 let isRepeat = false;
 let activeBackground = 'off';
@@ -443,3 +444,52 @@ loadSong(allSongs[songIndex]);
 generatePlaylist();
 updateActiveBackground();
 loadSettings();
+
+// At the bottom of script.js, REPLACE the old event listener with this one
+document.addEventListener('keydown', (event) => {
+    // This line prevents shortcuts from working when you're typing in the search bar
+    if (document.activeElement === searchInput) return;
+
+    switch (event.key) {
+        case ' ': // Spacebar for Play/Pause
+            event.preventDefault(); // This stops the page from scrolling down
+            playBtn.click();
+            break;
+            
+        case 'ArrowRight': // Right Arrow for Next Song
+            nextSong();
+            break;
+            
+        case 'ArrowLeft': // Left Arrow for Previous Song
+            prevSong();
+            break;
+            
+        case 'm': // M key for Mute/Unmute
+        case 'M':
+            if (audio.volume > 0) {
+                lastVolume = audio.volume;
+                audio.volume = 0;
+                volumeSlider.value = 0;
+            } else {
+                audio.volume = lastVolume;
+                volumeSlider.value = lastVolume;
+            }
+            break;
+
+        case 'ArrowUp': // Up Arrow for Volume Up
+            event.preventDefault();
+            // Increase volume by 5%, but not more than 1 (100%)
+            const newVolumeUp = Math.min(1, audio.volume + 0.05);
+            audio.volume = newVolumeUp;
+            volumeSlider.value = newVolumeUp;
+            break;
+
+        case 'ArrowDown': // Down Arrow for Volume Down
+            event.preventDefault();
+            // Decrease volume by 5%, but not less than 0 (0%)
+            const newVolumeDown = Math.max(0, audio.volume - 0.05);
+            audio.volume = newVolumeDown;
+            volumeSlider.value = newVolumeDown;
+            break;
+    }
+});
