@@ -750,3 +750,7 @@ input[type="range"]::-webkit-slider-thumb {
     /* Apply the animation */
     animation: fade-in 0.5s ease-out;
 }
+/* Add this to style.css */
+#like-btn.active i {
+    color: var(--primary-color);
+}
