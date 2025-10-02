@@ -193,9 +193,49 @@ function nextSong() {
     playSong();
 }
 
+function loadSettings() {
+    // Load saved background
+    const savedBackground = localStorage.getItem('helios-background');
+    if (savedBackground) {
+        activeBackground = savedBackground;
+        // Update the active button in the settings panel
+        settingOptions.forEach(option => {
+            option.classList.remove('active');
+            if (option.dataset.bg === activeBackground) {
+                option.classList.add('active');
+            }
+        });
+        updateActiveBackground();
+    }
+
+    // Load saved volume
+    const savedVolume = localStorage.getItem('helios-volume');
+    if (savedVolume !== null) {
+        audio.volume = savedVolume;
+        volumeSlider.value = savedVolume;
+    }
+
+    // Load saved shuffle state
+    const savedShuffle = localStorage.getItem('helios-shuffle');
+    if (savedShuffle !== null) {
+        isShuffle = (savedShuffle === 'true'); // Convert string to boolean
+        shuffleBtn.classList.toggle('active', isShuffle);
+    }
+
+    // Load saved repeat state
+    const savedRepeat = localStorage.getItem('helios-repeat');
+    if (savedRepeat !== null) {
+        isRepeat = (savedRepeat === 'true'); // Convert string to boolean
+        repeatBtn.classList.toggle('active', isRepeat);
+    }
+}
+
 function updateProgress(e) { if (isPlaying && !isNaN(audio.duration)) { const { duration, currentTime } = e.srcElement; const p = (currentTime / duration) * 100; progress.style.width = `${p}%`; const f = t => String(Math.floor(t)).padStart(2, '0'); const dM = Math.floor(duration / 60); const dS = f(duration % 60); durationEl.textContent = `${dM}:${dS}`; const cM = Math.floor(currentTime / 60); const cS = f(currentTime % 60); currentTimeEl.textContent = `${cM}:${cS}`; } }
 function setProgress(e) { const w = this.clientWidth; const cX = e.offsetX; const { duration } = audio; audio.currentTime = (cX / w) * duration; }
-function setVolume() { audio.volume = volumeSlider.value; }
+function setVolume() {
+    audio.volume = volumeSlider.value;
+    localStorage.setItem('helios-volume', volumeSlider.value);
+}
 
 function generatePlaylist() {
     playlistEl.innerHTML = '';
@@ -256,7 +296,12 @@ function showSearchSuggestions(term) {
 
 function togglePlaylist() { settingsPanel.classList.remove('show'); playlistPanel.classList.toggle('show'); }
 function toggleSettingsPanel() { playlistPanel.classList.remove('show'); settingsPanel.classList.toggle('show'); }
-function toggleShuffle() { isShuffle = !isShuffle; shuffleBtn.classList.toggle('active', isShuffle); }
+function toggleShuffle() {
+    isShuffle = !isShuffle;
+    shuffleBtn.classList.toggle('active', isShuffle);
+    // Save the new shuffle state
+    localStorage.setItem('helios-shuffle', isShuffle);
+}
 function toggleRepeat() { isRepeat = !isRepeat; repeatBtn.classList.toggle('active', isRepeat); }
 function handleSongEnd() { if (isRepeat) { audio.currentTime = 0; playSong(); } else { nextSong(); } }
 
@@ -358,11 +403,14 @@ settingOptions.forEach(option => {
         settingOptions.forEach(btn => btn.classList.remove('active'));
         option.classList.add('active');
         activeBackground = option.dataset.bg;
+
+        // Save the new background setting
+        localStorage.setItem('helios-background', activeBackground);
+
         updateActiveBackground();
         if (activeBackground === 'vortex' && !scene) { initVortex(); }
     });
 });
-
 searchInput.addEventListener('input', (e) => showSearchSuggestions(e.target.value.toLowerCase()));
 document.addEventListener('click', (e) => {
     if (!document.querySelector('.search-wrapper').contains(e.target)) {
@@ -394,3 +442,4 @@ window.addEventListener('resize', () => {
 loadSong(allSongs[songIndex]);
 generatePlaylist();
 updateActiveBackground();
+loadSettings();
