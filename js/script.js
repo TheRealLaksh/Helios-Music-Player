@@ -12,11 +12,11 @@ const albumArt = document.querySelector('.album-art');
 
 // Controls
 const prevBtn = document.getElementById('prev');
-const likeBtn = document.getElementById('like-btn');
 const playBtn = document.getElementById('play');
 const nextBtn = document.getElementById('next');
 const shuffleBtn = document.getElementById('shuffle-btn');
-const repeatBtn = document.getElementById('repeat-btn'); // Note: You mentioned you didn't add this, but the variable is kept for future use.
+const repeatBtn = document.getElementById('repeat-btn');
+const likeBtn = document.getElementById('like-btn');
 
 // Progress Bar
 const progressContainer = document.getElementById('progress-container');
@@ -153,8 +153,8 @@ const allSongs = playlists.flatMap(p => p.songs);
 let songIndex = 0;
 let isPlaying = false;
 let isShuffle = false;
-let likedSongs = [];
 let isRepeat = false;
+let likedSongs = [];
 let currentPlaylist = null;
 
 // Settings State
@@ -202,15 +202,15 @@ function loadSong(song) {
     updateActiveBackground();
     highlightCurrentSong();
 
-    // --- CORRECTED HEART ICON LOGIC ---
+    // Update the heart icon's state based on the newly loaded song
     const icon = likeBtn.querySelector('i.ph');
     const isLiked = likedSongs.some(s => s.name === song.name);
     if (isLiked) {
         likeBtn.classList.add('active');
-        icon.classList.add('ph-fill'); // Correct: Add the 'ph-fill' class
+        icon.classList.add('ph-fill');
     } else {
         likeBtn.classList.remove('active');
-        icon.classList.remove('ph-fill'); // Correct: Remove the 'ph-fill' class
+        icon.classList.remove('ph-fill');
     }
 
     // Remove animation class after it finishes
@@ -243,33 +243,41 @@ function pauseSong() {
 }
 
 /**
- * Plays the next song in the queue, handling shuffle logic.
+ * Plays the next song in the queue, handling shuffle and playlist context.
  */
 function nextSong() {
-    // Check if we are in shuffle mode AND a playlist is active
-    if (isShuffle && currentPlaylist) {
-        const currentIdxInPlaylist = currentPlaylist.songs.findIndex(s => s.name === allSongs[songIndex].name);
-        let randomIdx;
-        do {
-            randomIdx = Math.floor(Math.random() * currentPlaylist.songs.length);
-        } while (currentPlaylist.songs.length > 1 && randomIdx === currentIdxInPlaylist);
-        
-        const nextShuffledSong = currentPlaylist.songs[randomIdx];
-        songIndex = allSongs.findIndex(s => s.name === nextShuffledSong.name);
+    if (isShuffle) {
+        let nextIndex;
+        // If shuffling within a specific playlist
+        if (currentPlaylist) {
+            const currentIdxInPlaylist = currentPlaylist.songs.findIndex(s => s.name === allSongs[songIndex].name);
+            let randomIdx;
+            do {
+                randomIdx = Math.floor(Math.random() * currentPlaylist.songs.length);
+            } while (currentPlaylist.songs.length > 1 && randomIdx === currentIdxInPlaylist);
+            
+            const nextShuffledSong = currentPlaylist.songs[randomIdx];
+            nextIndex = allSongs.findIndex(s => s.name === nextShuffledSong.name);
+        } else { // Otherwise, shuffle through all songs globally
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * allSongs.length);
+            } while (allSongs.length > 1 && randomIndex === songIndex);
+            nextIndex = randomIndex;
+        }
+        songIndex = nextIndex;
     } else {
-        // --- CORRECTED SEQUENTIAL LOGIC ---
-        // If we are playing from a specific playlist (Liked Songs, English, etc.)
+        // Sequential playback logic
         if (currentPlaylist) {
             let currentIdxInPlaylist = currentPlaylist.songs.findIndex(s => s.name === allSongs[songIndex].name);
             currentIdxInPlaylist++;
-            // Loop back to the start of the current playlist
             if (currentIdxInPlaylist >= currentPlaylist.songs.length) {
-                currentIdxInPlaylist = 0;
+                currentIdxInPlaylist = 0; // Loop to start of playlist
             }
             const nextSongInPlaylist = currentPlaylist.songs[currentIdxInPlaylist];
             songIndex = allSongs.findIndex(s => s.name === nextSongInPlaylist.name);
         } else {
-            // Fallback for when no playlist is active: just go to the next song in the master list
+            // Fallback: just go to the next song in the master list
             songIndex++;
             if (songIndex >= allSongs.length) {
                 songIndex = 0;
@@ -281,21 +289,20 @@ function nextSong() {
 }
 
 /**
- * Plays the previous song in the queue.
+ * Plays the previous song in the queue, handling playlist context.
  */
 function prevSong() {
     // If we are playing from a specific playlist
     if (currentPlaylist) {
         let currentIdxInPlaylist = currentPlaylist.songs.findIndex(s => s.name === allSongs[songIndex].name);
         currentIdxInPlaylist--;
-        // Loop back to the end of the current playlist
         if (currentIdxInPlaylist < 0) {
-            currentIdxInPlaylist = currentPlaylist.songs.length - 1;
+            currentIdxInPlaylist = currentPlaylist.songs.length - 1; // Loop to end of playlist
         }
         const prevSongInPlaylist = currentPlaylist.songs[currentIdxInPlaylist];
         songIndex = allSongs.findIndex(s => s.name === prevSongInPlaylist.name);
     } else {
-        // Fallback for when no playlist is active: just go to the previous song in the master list
+        // Fallback: just go to the previous song in the master list
         songIndex--;
         if (songIndex < 0) {
             songIndex = allSongs.length - 1;
@@ -324,7 +331,6 @@ function handleSongEnd() {
 
 /**
  * Updates the progress bar and time display as the song plays.
- * @param {Event} e The timeupdate event object.
  */
 function updateProgress(e) {
     if (isPlaying && !isNaN(audio.duration)) {
@@ -333,10 +339,12 @@ function updateProgress(e) {
         progress.style.width = `${progressPercent}%`;
 
         const formatTime = (time) => String(Math.floor(time)).padStart(2, '0');
-
+        
         const durationMinutes = Math.floor(duration / 60);
         const durationSeconds = formatTime(duration % 60);
-        durationEl.textContent = `${durationMinutes}:${durationSeconds}`;
+        if (durationEl.textContent !== `${durationMinutes}:${durationSeconds}`) {
+            durationEl.textContent = `${durationMinutes}:${durationSeconds}`;
+        }
 
         const currentMinutes = Math.floor(currentTime / 60);
         const currentSeconds = formatTime(currentTime % 60);
@@ -346,13 +354,14 @@ function updateProgress(e) {
 
 /**
  * Seeks to a specific point in the song when the progress bar is clicked.
- * @param {Event} e The click event object.
  */
 function setProgress(e) {
     const width = this.clientWidth;
     const clickX = e.offsetX;
     const { duration } = audio;
-    audio.currentTime = (clickX / width) * duration;
+    if (!isNaN(duration)) {
+        audio.currentTime = (clickX / width) * duration;
+    }
 }
 
 /**
@@ -384,11 +393,10 @@ function toggleRepeat() {
 /**
  * Populates the playlist panel with songs.
  */
-// In script.js, REPLACE the entire generatePlaylist function with this
 function generatePlaylist() {
     playlistEl.innerHTML = '';
 
-    // 1. Create and add the "Liked Songs" playlist if it has songs
+    // Create and add the "Liked Songs" playlist if it has songs
     if (likedSongs.length > 0) {
         const details = document.createElement('details');
         details.className = 'playlist-group';
@@ -411,10 +419,7 @@ function generatePlaylist() {
                 </div>
             `;
             li.addEventListener('click', () => {
-                // --- THIS IS THE FIX ---
-                // We now tell the player that "Liked Songs" is the current playlist
                 currentPlaylist = { name: 'Liked Songs', songs: likedSongs };
-                
                 songIndex = idx;
                 loadSong(allSongs[songIndex]);
                 playSong();
@@ -425,7 +430,7 @@ function generatePlaylist() {
         playlistEl.appendChild(details);
     }
 
-    // 2. Add the original, hardcoded playlists
+    // Add the original, hardcoded playlists
     playlists.forEach(p => {
         const details = document.createElement('details');
         details.className = 'playlist-group';
@@ -447,7 +452,6 @@ function generatePlaylist() {
                 </div>
             `;
             li.addEventListener('click', () => {
-                // This part was already correct, it sets the current playlist to 'p'
                 currentPlaylist = p;
                 songIndex = idx;
                 loadSong(allSongs[songIndex]);
@@ -461,6 +465,7 @@ function generatePlaylist() {
 
     highlightCurrentSong();
 }
+
 /**
  * Visually highlights the currently playing song in the playlist.
  */
@@ -480,21 +485,7 @@ function highlightCurrentSong() {
 }
 
 /**
- * Finds which of the original playlists a globally indexed song belongs to.
- * @param {number} gIndex The global index of the song in `allSongs`.
- * @returns {object|null} The playlist object or null if not found.
- */
-function findPlaylistForSong(gIndex) {
-    for (const p of playlists) {
-        const exists = p.songs.find(s => allSongs[gIndex] && s.name === allSongs[gIndex].name);
-        if (exists) return p;
-    }
-    return null;
-}
-
-/**
  * Shows search suggestions based on user input.
- * @param {string} term The search term.
  */
 function showSearchSuggestions(term) {
     searchSuggestions.innerHTML = '';
@@ -513,7 +504,8 @@ function showSearchSuggestions(term) {
         li.innerHTML = `<strong>${song.displayName}</strong><br><span>${song.artist}</span>`;
         li.addEventListener('click', () => {
             songIndex = allSongs.findIndex(s => s.name === song.name);
-            currentPlaylist = findPlaylistForSong(songIndex);
+            // When starting playback from search, clear the playlist context
+            currentPlaylist = null; 
             loadSong(allSongs[songIndex]);
             playSong();
             searchInput.value = '';
@@ -577,7 +569,6 @@ function setupPlayerVisualizer() {
  * Updates the main page background based on the user's setting.
  */
 function updateActiveBackground() {
-    // Deactivate all backgrounds first
     auroraBg.classList.remove('active');
     vinylBg.classList.remove('active');
     vortexCanvas.classList.remove('active');
@@ -604,7 +595,6 @@ function updateActiveBackground() {
         case 'off':
         default:
             const imageUrl = `url('Assets/images/${allSongs[songIndex].cover}.jpg')`;
-
             if (currentBgDiv === 1) {
                 albumArtBg2.style.backgroundImage = imageUrl;
                 albumArtBg1.style.opacity = '0';
@@ -669,7 +659,6 @@ function initVortex() {
  */
 function loadSettings() {
     // 1. Load Liked Songs
-    // A try-catch block prevents the app from crashing if localStorage data is corrupted.
     try {
         const savedLikedSongs = localStorage.getItem('helios-likedSongs');
         if (savedLikedSongs) {
@@ -677,14 +666,13 @@ function loadSettings() {
         }
     } catch (error) {
         console.error("Error parsing liked songs from localStorage:", error);
-        likedSongs = []; // On error, reset to an empty array.
+        likedSongs = [];
     }
 
     // 2. Load Visual Theme / Background
     const savedBackground = localStorage.getItem('helios-background');
     if (savedBackground) {
         activeBackground = savedBackground;
-        // Update the UI to show the correct active button in the settings panel.
         settingOptions.forEach(option => {
             const isActive = option.dataset.bg === activeBackground;
             option.classList.toggle('active', isActive);
@@ -699,14 +687,12 @@ function loadSettings() {
     }
 
     const savedShuffle = localStorage.getItem('helios-shuffle');
-    // Check if the shuffle button element exists before updating its class.
     if (shuffleBtn && savedShuffle !== null) {
         isShuffle = (savedShuffle === 'true');
         shuffleBtn.classList.toggle('active', isShuffle);
     }
 
     const savedRepeat = localStorage.getItem('helios-repeat');
-    // Check if the repeat button exists. This prevents errors if you haven't added it.
     if (repeatBtn && savedRepeat !== null) {
         isRepeat = (savedRepeat === 'true');
         repeatBtn.classList.toggle('active', isRepeat);
@@ -731,18 +717,33 @@ playBtn.addEventListener('click', () => {
     isPlaying ? pauseSong() : playSong();
 });
 prevBtn.addEventListener('click', prevSong);
-nextBtn.addEventListener('click', nextSong);
+nextBtn.addEventListener('click', nextBtn);
 shuffleBtn.addEventListener('click', toggleShuffle);
 repeatBtn.addEventListener('click', toggleRepeat);
+likeBtn.addEventListener('click', () => {
+    const currentSong = allSongs[songIndex];
+    const songIsLiked = likedSongs.some(song => song.name === currentSong.name);
+    const icon = likeBtn.querySelector('i.ph');
+
+    if (songIsLiked) {
+        likedSongs = likedSongs.filter(song => song.name !== currentSong.name);
+        likeBtn.classList.remove('active');
+        icon.classList.remove('ph-fill');
+    } else {
+        likedSongs.push(currentSong);
+        likeBtn.classList.add('active');
+        icon.classList.add('ph-fill');
+    }
+
+    localStorage.setItem('helios-likedSongs', JSON.stringify(likedSongs));
+    generatePlaylist();
+});
 
 // Audio Events
 audio.addEventListener('ended', handleSongEnd);
 audio.addEventListener('timeupdate', updateProgress);
 audio.addEventListener('loadedmetadata', () => {
-    // Update time display for the newly loaded song
     updateProgress({ srcElement: { duration: audio.duration, currentTime: 0 } });
-
-    // Check for and apply a saved playback position
     const savedPosition = localStorage.getItem('helios-lastPosition');
     if (savedPosition) {
         audio.currentTime = parseFloat(savedPosition);
@@ -786,14 +787,13 @@ window.addEventListener('resize', () => {
 });
 
 window.addEventListener('beforeunload', () => {
-    // Only save the position if a song is actively playing
     if (isPlaying) {
         localStorage.setItem('helios-lastPosition', audio.currentTime);
     }
 });
 
 document.addEventListener('keydown', (event) => {
-    if (document.activeElement === searchInput) return; // Ignore shortcuts when searching
+    if (document.activeElement === searchInput) return;
 
     switch (event.key) {
         case ' ':
@@ -822,42 +822,18 @@ document.addEventListener('keydown', (event) => {
             const newVolumeUp = Math.min(1, audio.volume + 0.05);
             audio.volume = newVolumeUp;
             volumeSlider.value = newVolumeUp;
-            setVolume(); // Save the new volume
+            setVolume();
             break;
         case 'ArrowDown':
             event.preventDefault();
             const newVolumeDown = Math.max(0, audio.volume - 0.05);
             audio.volume = newVolumeDown;
             volumeSlider.value = newVolumeDown;
-            setVolume(); // Save the new volume
+            setVolume();
             break;
     }
 });
 
-// In script.js, add this to your Event Listeners section
-likeBtn.addEventListener('click', () => {
-    const currentSong = allSongs[songIndex];
-    const songIsLiked = likedSongs.some(song => song.name === currentSong.name);
-    const icon = likeBtn.querySelector('i.ph');
-
-    if (songIsLiked) {
-        // If already liked, remove it from the array
-        likedSongs = likedSongs.filter(song => song.name !== currentSong.name);
-        likeBtn.classList.remove('active');
-        icon.classList.remove('ph-fill'); // Use remove
-    } else {
-        // If not liked, add it to the array
-        likedSongs.push(currentSong);
-        likeBtn.classList.add('active');
-        icon.classList.add('ph-fill'); // Use add
-    }
-
-    // THIS LINE IS CRITICAL FOR SAVING:
-    localStorage.setItem('helios-likedSongs', JSON.stringify(likedSongs));
-    
-    // Regenerate the playlist to show the changes immediately
-    generatePlaylist();
-});
 
 // ==========================================================================
 // H. INITIALIZATION
