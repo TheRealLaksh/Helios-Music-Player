@@ -1,114 +1,112 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;600;800&display=swap');
 
- :root {
-     --primary-color: #1DB954;
-     --bg-color: #050505;
-     /* Darker background for more contrast */
-     --text-primary: #FFFFFF;
-     --text-secondary: #fcfcfc;
- }
+:root {
+    --primary-color: #1DB954;
+    --bg-color: #050505;
+    --text-primary: #FFFFFF;
+    --text-secondary: #b3b3b3;
+}
 
- * {
-     margin: 0;
-     padding: 0;
-     box-sizing: border-box;
- }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
- body {
-     background-color: var(--bg-color);
-     font-family: 'Manrope', sans-serif;
-     color: var(--text-primary);
-     overflow: hidden;
-     opacity: 1;
-     transition: opacity 0.7s ease-out;
- }
+body {
+    background-color: var(--bg-color);
+    font-family: 'Manrope', sans-serif;
+    color: var(--text-primary);
+    overflow: hidden;
+    opacity: 1;
+    transition: opacity 0.7s ease-out;
+}
 
- body.fade-out {
-     opacity: 0;
- }
+body.fade-out {
+    opacity: 0;
+}
 
- #scene-container {
-     position: fixed;
-     top: 0;
-     left: 0;
-     width: 100%;
-     height: 100%;
-     z-index: 1;
- }
+#scene-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
 
- .hero-content {
-     position: relative;
-     z-index: 2;
-     display: flex;
-     flex-direction: column;
-     align-items: center;
-     justify-content: center;
-     min-height: 100vh;
-     text-align: center;
-     padding: 2rem;
-     animation: float-in 1.5s ease-out forwards;
-     opacity: 0;
- }
+.hero-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    padding: 2rem;
+    animation: float-in 1.5s ease-out forwards;
+    opacity: 0;
+}
 
- @keyframes float-in {
-     from {
-         opacity: 0;
-         transform: translateY(20px);
-     }
+@keyframes float-in {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-     to {
-         opacity: 1;
-         transform: translateY(0);
-     }
- }
+.logo {
+    font-size: 6rem;
+    font-weight: 800;
+    letter-spacing: -3px;
+    background: linear-gradient(90deg, #eaeaea, #b3b3b3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+}
 
- .logo {
-     font-size: 6rem;
-     font-weight: 800;
-     letter-spacing: -3px;
-     background: linear-gradient(90deg, #eaeaea, #b3b3b3);
-     -webkit-background-clip: text;
-     -webkit-text-fill-color: transparent;
-     margin-bottom: 0.5rem;
- }
+.tagline {
+    font-size: 1.25rem;
+    font-weight: 300;
+    color: var(--text-secondary);
+    margin-bottom: 2.5rem;
+    max-width: 400px;
+}
 
- .tagline {
-     font-size: 1.25rem;
-     font-weight: 300;
-     color: #9c9b9b;
-     margin-bottom: 2.5rem;
-     max-width: 400px;
- }
+.cta-button {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: #000;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 1rem 3rem;
+    border-radius: 50px;
+    border: 2px solid var(--primary-color);
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 20px rgba(29, 185, 84, 0.3);
+}
 
- .cta-button {
-     display: inline-block;
-     background-color: var(--primary-color);
-     color: #000;
-     font-size: 1rem;
-     font-weight: 600;
-     text-decoration: none;
-     padding: 1rem 3rem;
-     border-radius: 50px;
-     border: 2px solid var(--primary-color);
-     transition: all 0.3s ease;
-     box-shadow: 0 5px 20px rgba(29, 185, 84, 0.3);
- }
+.cta-button:hover {
+    background-color: transparent;
+    color: var(--primary-color);
+    box-shadow: 0 0 25px rgba(29, 185, 84, 0.5);
+    transform: translateY(-3px);
+}
 
- .cta-button:hover {
-     background-color: transparent;
-     color: var(--primary-color);
-     box-shadow: 0 0 25px rgba(29, 185, 84, 0.5);
-     transform: translateY(-3px);
- }
-
- .footer {
-     position: absolute;
-     bottom: 2rem;
-     left: 50%;
-     transform: translateX(-50%);
-     z-index: 2;
-     color: #FFFFFF;;
-     font-size: 0.8rem;
-     font-weight: 300;
-     opacity: 0.5;
- }
+.footer {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    font-weight: 300;
+    opacity: 0.5;
+}

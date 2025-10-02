@@ -118,19 +118,17 @@ const playlists = [
             { name: 'udedilbefikre', displayName: 'Ude Dil Befikre', artist: 'Benny Dayal', cover: 'udedilbefikre' },
             { name: 'wishes', displayName: 'Wishes', artist: 'Hasan Raheem ft. Talwiinder', cover: 'wishes' },
         ]
-
     }
 ];
 
 const allSongs = playlists.flatMap(p => p.songs);
 const colorPresets = allSongs.map(song => {
-    let hash = 0;
-    for (let i = 0; i < song.name.length; i++) { hash = song.name.charCodeAt(i) + ((hash << 5) - hash); }
-    const color1 = (hash & 0x00FFFFFF).toString(16).toUpperCase();
-    const color2 = ((hash >> 8) & 0x00FFFFFF).toString(16).toUpperCase();
-    const aurora1 = "#" + "00000".substring(0, 6 - color1.length) + color1;
-    const aurora2 = "#" + "00000".substring(0, 6 - color2.length) + color2;
-    return { aurora: [aurora1, aurora2], vinyl: [aurora1, '#222'], vortex: parseInt(color1.replace('#', ''), 16) };
+    let hash = 0; for (let i = 0; i < song.name.length; i++) { hash = song.name.charCodeAt(i) + ((hash << 5) - hash); }
+    const c1 = (hash & 0x00FFFFFF).toString(16).toUpperCase();
+    const c2 = ((hash >> 8) & 0x00FFFFFF).toString(16).toUpperCase();
+    const a1 = "#" + "0".repeat(6 - c1.length) + c1;
+    const a2 = "#" + "0".repeat(6 - c2.length) + c2;
+    return { aurora: [a1, a2], vinyl: [a1, '#222'], vortex: parseInt(c1, 16) };
 });
 
 let isPlaying = false;
@@ -143,15 +141,15 @@ let audioContext, analyser;
 let scene, camera, renderer, lines;
 
 function highlightCurrentSong() {
-    document.querySelectorAll('#playlist li').forEach(item => item.classList.remove('playing'));
-    document.querySelectorAll('#playlist summary').forEach(item => item.classList.remove('active'));
-    const currentSongItem = document.querySelector(`#playlist li[data-index='${songIndex}']`);
-    if (currentSongItem) {
-        currentSongItem.classList.add('playing');
-        const parentGroup = currentSongItem.closest('.playlist-group');
-        if (parentGroup) {
-            parentGroup.querySelector('summary').classList.add('active');
-            if (!parentGroup.open) parentGroup.open = true;
+    document.querySelectorAll('#playlist li').forEach(i => i.classList.remove('playing'));
+    document.querySelectorAll('#playlist summary').forEach(i => i.classList.remove('active'));
+    const item = document.querySelector(`#playlist li[data-index='${songIndex}']`);
+    if (item) {
+        item.classList.add('playing');
+        const group = item.closest('.playlist-group');
+        if (group) {
+            group.querySelector('summary').classList.add('active');
+            if (!group.open) group.open = true;
         }
     }
 }
@@ -159,39 +157,16 @@ function highlightCurrentSong() {
 function loadSong(song) {
     title.textContent = song.displayName;
     artist.textContent = song.artist;
-    audio.src = `assets/music/${song.name}.mp3`;
-    albumArt.src = `assets/images/${song.cover}.jpg`;
+    audio.src = `Assets/music/${song.name}.mp3`;
+    albumArt.src = `Assets/images/${song.cover}.jpg`;
     updateActiveBackground();
     highlightCurrentSong();
 }
 
-function playSong() {
-    isPlaying = true;
-    player.classList.add('play');
-    playBtn.querySelector('i.ph').classList.remove('ph-play');
-    playBtn.querySelector('i.ph').classList.add('ph-pause');
-    audio.play();
-    const vinylSVG = document.getElementById('vinyl-svg');
-    if (vinylSVG) vinylSVG.classList.add('playing');
-}
+function playSong() { isPlaying = true; player.classList.add('play'); playBtn.querySelector('i.ph').classList.remove('ph-play'); playBtn.querySelector('i.ph').classList.add('ph-pause'); audio.play(); const svg = document.getElementById('vinyl-svg'); if (svg) svg.classList.add('playing'); }
+function pauseSong() { isPlaying = false; player.classList.remove('play'); playBtn.querySelector('i.ph').classList.add('ph-play'); playBtn.querySelector('i.ph').classList.remove('ph-pause'); audio.pause(); const svg = document.getElementById('vinyl-svg'); if (svg) svg.classList.remove('playing'); }
 
-function pauseSong() {
-    isPlaying = false;
-    player.classList.remove('play');
-    playBtn.querySelector('i.ph').classList.add('ph-play');
-    playBtn.querySelector('i.ph').classList.remove('ph-pause');
-    audio.pause();
-    const vinylSVG = document.getElementById('vinyl-svg');
-    if (vinylSVG) vinylSVG.classList.remove('playing');
-}
-
-function findPlaylistForSong(globalIndex) {
-    for (const playlist of playlists) {
-        const songExists = playlist.songs.find(s => allSongs[globalIndex] && s.name === allSongs[globalIndex].name);
-        if (songExists) return playlist;
-    }
-    return null;
-}
+function findPlaylistForSong(gIndex) { for (const p of playlists) { const exists = p.songs.find(s => allSongs[gIndex] && s.name === allSongs[gIndex].name); if (exists) return p; } return null; }
 
 function prevSong() {
     songIndex--;
@@ -203,40 +178,50 @@ function prevSong() {
 
 function nextSong() {
     if (isShuffle) {
-        if (!currentPlaylist) { currentPlaylist = findPlaylistForSong(songIndex) || playlists[0]; }
-        const currentSongInPlaylistIndex = currentPlaylist.songs.findIndex(s => s.name === allSongs[songIndex].name);
-        let randomIndexInPlaylist;
-        do { randomIndexInPlaylist = Math.floor(Math.random() * currentPlaylist.songs.length); } while (currentPlaylist.songs.length > 1 && randomIndexInPlaylist === currentSongInPlaylistIndex);
-        const nextShuffledSong = currentPlaylist.songs[randomIndexInPlaylist];
+        if (!currentPlaylist) currentPlaylist = findPlaylistForSong(songIndex) || playlists[0];
+        const currentIdx = currentPlaylist.songs.findIndex(s => s.name === allSongs[songIndex].name);
+        let randomIdx;
+        do { randomIdx = Math.floor(Math.random() * currentPlaylist.songs.length); } while (currentPlaylist.songs.length > 1 && randomIdx === currentIdx);
+        const nextShuffledSong = currentPlaylist.songs[randomIdx];
         songIndex = allSongs.findIndex(s => s.name === nextShuffledSong.name);
     } else {
         songIndex++;
-        if (songIndex > allSongs.length - 1) { songIndex = 0; }
+        if (songIndex >= allSongs.length) songIndex = 0;
         currentPlaylist = findPlaylistForSong(songIndex);
     }
     loadSong(allSongs[songIndex]);
     playSong();
 }
 
-function updateProgress(e) { if (isPlaying && !isNaN(audio.duration)) { const { duration, currentTime } = e.srcElement; const p = (currentTime / duration) * 100; progress.style.width = `${p}%`; const f = (t) => String(Math.floor(t)).padStart(2, '0'); const dM = Math.floor(duration / 60); const dS = f(duration % 60); durationEl.textContent = `${dM}:${dS}`; const cM = Math.floor(currentTime / 60); const cS = f(currentTime % 60); currentTimeEl.textContent = `${cM}:${cS}`; } }
+function updateProgress(e) { if (isPlaying && !isNaN(audio.duration)) { const { duration, currentTime } = e.srcElement; const p = (currentTime / duration) * 100; progress.style.width = `${p}%`; const f = t => String(Math.floor(t)).padStart(2, '0'); const dM = Math.floor(duration / 60); const dS = f(duration % 60); durationEl.textContent = `${dM}:${dS}`; const cM = Math.floor(currentTime / 60); const cS = f(currentTime % 60); currentTimeEl.textContent = `${cM}:${cS}`; } }
 function setProgress(e) { const w = this.clientWidth; const cX = e.offsetX; const { duration } = audio; audio.currentTime = (cX / w) * duration; }
 function setVolume() { audio.volume = volumeSlider.value; }
-function generatePlaylist() { playlistEl.innerHTML = ''; playlists.forEach(playlist => { const details = document.createElement('details'); details.classList.add('playlist-group'); const summary = document.createElement('summary'); summary.textContent = playlist.name; details.appendChild(summary); const songList = document.createElement('ul'); playlist.songs.forEach(song => { const li = document.createElement('li'); li.textContent = `${song.displayName} - ${song.artist}`; const songIndexInAllSongs = allSongs.findIndex(s => s.name === song.name); li.setAttribute('data-index', songIndexInAllSongs); li.addEventListener('click', () => { currentPlaylist = playlist; songIndex = songIndexInAllSongs; loadSong(allSongs[songIndex]); playSong(); }); songList.appendChild(li); }); details.appendChild(songList); playlistEl.appendChild(details); }); highlightCurrentSong(); }
 
-function showSearchSuggestions(searchTerm) {
+function generatePlaylist() {
+    playlistEl.innerHTML = '';
+    playlists.forEach(p => {
+        const details = document.createElement('details'); details.className = 'playlist-group';
+        const summary = document.createElement('summary'); summary.textContent = p.name; details.appendChild(summary);
+        const ul = document.createElement('ul');
+        p.songs.forEach(song => {
+            const li = document.createElement('li'); li.textContent = `${song.displayName} - ${song.artist}`;
+            const idx = allSongs.findIndex(s => s.name === song.name);
+            li.dataset.index = idx;
+            li.addEventListener('click', () => { currentPlaylist = p; songIndex = idx; loadSong(allSongs[songIndex]); playSong(); });
+            ul.appendChild(li);
+        });
+        details.appendChild(ul);
+        playlistEl.appendChild(details);
+    });
+    highlightCurrentSong();
+}
+
+function showSearchSuggestions(term) {
     searchSuggestions.innerHTML = '';
-    if (!searchTerm.trim()) {
-        searchSuggestions.style.display = 'none';
-        return;
-    }
-    const lowerCaseSearchTerm = searchTerm.toLowerCase();
-    const filteredSongs = allSongs.filter(song => song.displayName.toLowerCase().includes(lowerCaseSearchTerm) || song.artist.toLowerCase().includes(lowerCaseSearchTerm));
-    if (filteredSongs.length > 0) {
-        searchSuggestions.style.display = 'block';
-    } else {
-        searchSuggestions.style.display = 'none';
-    }
-    filteredSongs.slice(0, 5).forEach(song => {
+    if (!term.trim()) { searchSuggestions.style.display = 'none'; return; }
+    const filtered = allSongs.filter(s => s.displayName.toLowerCase().includes(term) || s.artist.toLowerCase().includes(term));
+    searchSuggestions.style.display = filtered.length > 0 ? 'block' : 'none';
+    filtered.slice(0, 5).forEach(song => {
         const li = document.createElement('li');
         li.innerHTML = `<strong>${song.displayName}</strong><br><span>${song.artist}</span>`;
         li.addEventListener('click', () => {
@@ -245,7 +230,6 @@ function showSearchSuggestions(searchTerm) {
             loadSong(allSongs[songIndex]);
             playSong();
             searchInput.value = '';
-            searchSuggestions.innerHTML = '';
             searchSuggestions.style.display = 'none';
         });
         searchSuggestions.appendChild(li);
@@ -310,7 +294,7 @@ function updateActiveBackground() {
             break;
         case 'off':
         default:
-            albumArtBg.style.backgroundImage = `url('assets/images/${allSongs[songIndex].cover}.jpg')`;
+            albumArtBg.style.backgroundImage = `url('Assets/images/${allSongs[songIndex].cover}.jpg')`;
             albumArtBg.classList.add('active');
             break;
     }
@@ -361,9 +345,7 @@ settingOptions.forEach(option => {
     });
 });
 
-searchInput.addEventListener('input', (e) => {
-    showSearchSuggestions(e.target.value);
-});
+searchInput.addEventListener('input', (e) => showSearchSuggestions(e.target.value.toLowerCase()));
 document.addEventListener('click', (e) => {
     if (!document.querySelector('.search-wrapper').contains(e.target)) {
         searchSuggestions.style.display = 'none';
