@@ -649,13 +649,14 @@ input[type="range"]::-webkit-slider-thumb {
     opacity: 1;
 }
 
-#album-art-bg {
+.album-art-bg {
     background-size: cover;
     background-position: center;
     filter: blur(30px) brightness(0.6);
     transform: scale(1.2);
-    transition: background-image 0.7s ease-in-out;
+    transition: opacity 0.7s ease-in-out;
 }
+
 
 #aurora-bg {
     background: linear-gradient(45deg, var(--aurora1), var(--aurora2));
@@ -731,4 +732,21 @@ input[type="range"]::-webkit-slider-thumb {
 #playlist::-webkit-scrollbar-thumb:hover,
 #search-suggestions::-webkit-scrollbar-thumb:hover {
     background-color: #1ed760;
+}
+
+/* Add this to the end of style.css */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-in {
+    /* Apply the animation */
+    animation: fade-in 0.5s ease-out;
 }

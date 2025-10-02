@@ -12,7 +12,8 @@
 </head>
 
 <body>
-    <div id="album-art-bg" class="background-container"></div>
+    <div id="album-art-bg-1" class="album-art-bg background-container active"></div>
+    <div id="album-art-bg-2" class="album-art-bg background-container"></div>
     <div id="aurora-bg" class="background-container"></div>
     <div id="vinyl-bg" class="background-container"></div>
     <canvas id="vortex-canvas" class="background-container"></canvas>
@@ -23,7 +24,8 @@
             <div class="search-wrapper">
                 <div class="search-container">
                     <i class="ph ph-magnifying-glass"></i>
-                    <input type="text" id="search-input" placeholder="Search for songs or artists..." autocomplete="off">
+                    <input type="text" id="search-input" placeholder="Search for songs or artists..."
+                        autocomplete="off">
                 </div>
                 <ul id="search-suggestions"></ul>
             </div>
@@ -102,7 +104,7 @@
                 <button class="setting-option active" data-bg="off">Off (Album Art)</button>
             </div>
         </aside>
-        
+
     </div>
 
     <script src="js/script.js" defer></script>

@@ -1,37 +1,63 @@
-// --- DOM Elements ---
+// ==========================================================================
+// A. DOM ELEMENT SELECTION
+// ==========================================================================
+// All references to HTML elements are organized here for easy access.
+
+// Player Core
 const player = document.querySelector('.player');
+const audio = document.getElementById('audio');
 const title = document.getElementById('title');
 const artist = document.getElementById('artist');
-const audio = document.getElementById('audio');
-const progressContainer = document.getElementById('progress-container');
-const progress = document.getElementById('progress');
 const albumArt = document.querySelector('.album-art');
+
+// Controls
 const prevBtn = document.getElementById('prev');
 const playBtn = document.getElementById('play');
 const nextBtn = document.getElementById('next');
-const volumeSlider = document.getElementById('volume-slider');
+const shuffleBtn = document.getElementById('shuffle-btn');
+const repeatBtn = document.getElementById('repeat-btn'); // Note: You mentioned you didn't add this, but the variable is kept for future use.
+
+// Progress Bar
+const progressContainer = document.getElementById('progress-container');
+const progress = document.getElementById('progress');
 const currentTimeEl = document.getElementById('current-time');
 const durationEl = document.getElementById('duration');
+
+// Volume
+const volumeSlider = document.getElementById('volume-slider');
+
+// Playlist
 const playlistEl = document.getElementById('playlist');
 const playlistPanel = document.querySelector('.playlist-panel');
 const playlistToggle = document.getElementById('playlist-toggle');
 const playlistClose = document.getElementById('playlist-close');
-const shuffleBtn = document.getElementById('shuffle-btn');
-const repeatBtn = document.getElementById('repeat-btn');
-const playerVisualizerCanvas = document.getElementById('visualizer');
-const playerVisualizerCtx = playerVisualizerCanvas.getContext('2d');
+
+// Search
+const searchInput = document.getElementById('search-input');
+const searchSuggestions = document.getElementById('search-suggestions');
+
+// Settings & Backgrounds
 const settingsPanel = document.querySelector('.settings-panel');
 const settingsToggle = document.getElementById('settings-toggle');
 const settingsClose = document.getElementById('settings-close');
 const settingOptions = document.querySelectorAll('.setting-option');
-const albumArtBg = document.getElementById('album-art-bg');
+const albumArtBg1 = document.getElementById('album-art-bg-1');
+const albumArtBg2 = document.getElementById('album-art-bg-2');
 const auroraBg = document.getElementById('aurora-bg');
 const vinylBg = document.getElementById('vinyl-bg');
-const vortexCanvas = document.getElementById('vortex-canvas');
-const searchInput = document.getElementById('search-input');
-const searchSuggestions = document.getElementById('search-suggestions');
 
-// --- Playlist Data ---
+// Visualizers
+const playerVisualizerCanvas = document.getElementById('visualizer');
+const playerVisualizerCtx = playerVisualizerCanvas.getContext('2d');
+const vortexCanvas = document.getElementById('vortex-canvas');
+
+
+// ==========================================================================
+// B. APPLICATION STATE & DATA
+// ==========================================================================
+// Variables that hold the application's data and current state.
+
+// Song Data
 const playlists = [
     {
         name: 'English ',
@@ -120,10 +146,30 @@ const playlists = [
         ]
     }
 ];
-
 const allSongs = playlists.flatMap(p => p.songs);
+
+// Player State
+let songIndex = 0;
+let isPlaying = false;
+let isShuffle = false;
+let isRepeat = false;
+let currentPlaylist = null;
+
+// Settings State
+let activeBackground = 'off';
+let lastVolume = 1;
+let currentBgDiv = 1;
+
+// Visualizer State
+let audioContext, analyser;
+let scene, camera, renderer, lines;
+
+// Generates a unique color palette for each song based on its name
 const colorPresets = allSongs.map(song => {
-    let hash = 0; for (let i = 0; i < song.name.length; i++) { hash = song.name.charCodeAt(i) + ((hash << 5) - hash); }
+    let hash = 0;
+    for (let i = 0; i < song.name.length; i++) {
+        hash = song.name.charCodeAt(i) + ((hash << 5) - hash);
+    }
     const c1 = (hash & 0x00FFFFFF).toString(16).toUpperCase();
     const c2 = ((hash >> 8) & 0x00FFFFFF).toString(16).toUpperCase();
     const a1 = "#" + "0".repeat(6 - c1.length) + c1;
@@ -131,113 +177,175 @@ const colorPresets = allSongs.map(song => {
     return { aurora: [a1, a2], vinyl: [a1, '#222'], vortex: parseInt(c1, 16) };
 });
 
-let isPlaying = false;
-let songIndex = 0;
-let lastVolume = 1;
-let isShuffle = false;
-let isRepeat = false;
-let activeBackground = 'off';
-let currentPlaylist = null;
-let audioContext, analyser;
-let scene, camera, renderer, lines;
 
-function highlightCurrentSong() {
-    document.querySelectorAll('#playlist li').forEach(i => i.classList.remove('playing'));
-    document.querySelectorAll('#playlist summary').forEach(i => i.classList.remove('active'));
-    const item = document.querySelector(`#playlist li[data-index='${songIndex}']`);
-    if (item) {
-        item.classList.add('playing');
-        const group = item.closest('.playlist-group');
-        if (group) {
-            group.querySelector('summary').classList.add('active');
-            if (!group.open) group.open = true;
-        }
-    }
-}
+// ==========================================================================
+// C. CORE PLAYER FUNCTIONS
+// ==========================================================================
 
+/**
+ * Loads a song into the player, updating the UI and audio source.
+ * @param {object} song The song object to load.
+ */
 function loadSong(song) {
+    title.classList.add('animate-in');
+    artist.classList.add('animate-in');
+
     title.textContent = song.displayName;
     artist.textContent = song.artist;
     audio.src = `Assets/music/${song.name}.mp3`;
     albumArt.src = `Assets/images/${song.cover}.jpg`;
+    
+    localStorage.setItem('helios-lastSongIndex', songIndex);
+    
     updateActiveBackground();
     highlightCurrentSong();
+
+    // Remove animation class after it finishes to allow re-triggering
+    title.addEventListener('animationend', () => title.classList.remove('animate-in'), { once: true });
+    artist.addEventListener('animationend', () => artist.classList.remove('animate-in'), { once: true });
 }
 
-function playSong() { isPlaying = true; player.classList.add('play'); playBtn.querySelector('i.ph').classList.remove('ph-play'); playBtn.querySelector('i.ph').classList.add('ph-pause'); audio.play(); const svg = document.getElementById('vinyl-svg'); if (svg) svg.classList.add('playing'); }
-function pauseSong() { isPlaying = false; player.classList.remove('play'); playBtn.querySelector('i.ph').classList.add('ph-play'); playBtn.querySelector('i.ph').classList.remove('ph-pause'); audio.pause(); const svg = document.getElementById('vinyl-svg'); if (svg) svg.classList.remove('playing'); }
+/**
+ * Plays the currently loaded song and updates the UI.
+ */
+function playSong() {
+    isPlaying = true;
+    player.classList.add('play');
+    playBtn.querySelector('i.ph').classList.replace('ph-play', 'ph-pause');
+    audio.play();
+    const svg = document.getElementById('vinyl-svg');
+    if (svg) svg.classList.add('playing');
+}
 
-function findPlaylistForSong(gIndex) { for (const p of playlists) { const exists = p.songs.find(s => allSongs[gIndex] && s.name === allSongs[gIndex].name); if (exists) return p; } return null; }
+/**
+ * Pauses the currently playing song and updates the UI.
+ */
+function pauseSong() {
+    isPlaying = false;
+    player.classList.remove('play');
+    playBtn.querySelector('i.ph').classList.replace('ph-pause', 'ph-play');
+    audio.pause();
+    const svg = document.getElementById('vinyl-svg');
+    if (svg) svg.classList.remove('playing');
+}
 
-function prevSong() {
-    songIndex--;
-    if (songIndex < 0) { songIndex = allSongs.length - 1; }
+/**
+ * Plays the next song in the queue, handling shuffle logic.
+ */
+function nextSong() {
+    if (isShuffle) {
+        if (!currentPlaylist) currentPlaylist = findPlaylistForSong(songIndex) || playlists[0];
+        const currentIdxInPlaylist = currentPlaylist.songs.findIndex(s => s.name === allSongs[songIndex].name);
+        let randomIdx;
+        do {
+            randomIdx = Math.floor(Math.random() * currentPlaylist.songs.length);
+        } while (currentPlaylist.songs.length > 1 && randomIdx === currentIdxInPlaylist);
+        
+        const nextShuffledSong = currentPlaylist.songs[randomIdx];
+        songIndex = allSongs.findIndex(s => s.name === nextShuffledSong.name);
+    } else {
+        songIndex++;
+        if (songIndex >= allSongs.length) {
+            songIndex = 0;
+        }
+    }
     currentPlaylist = findPlaylistForSong(songIndex);
     loadSong(allSongs[songIndex]);
     playSong();
 }
 
-function nextSong() {
-    if (isShuffle) {
-        if (!currentPlaylist) currentPlaylist = findPlaylistForSong(songIndex) || playlists[0];
-        const currentIdx = currentPlaylist.songs.findIndex(s => s.name === allSongs[songIndex].name);
-        let randomIdx;
-        do { randomIdx = Math.floor(Math.random() * currentPlaylist.songs.length); } while (currentPlaylist.songs.length > 1 && randomIdx === currentIdx);
-        const nextShuffledSong = currentPlaylist.songs[randomIdx];
-        songIndex = allSongs.findIndex(s => s.name === nextShuffledSong.name);
-    } else {
-        songIndex++;
-        if (songIndex >= allSongs.length) songIndex = 0;
-        currentPlaylist = findPlaylistForSong(songIndex);
+/**
+ * Plays the previous song in the queue.
+ */
+function prevSong() {
+    songIndex--;
+    if (songIndex < 0) {
+        songIndex = allSongs.length - 1;
     }
+    currentPlaylist = findPlaylistForSong(songIndex);
     loadSong(allSongs[songIndex]);
     playSong();
 }
 
-function loadSettings() {
-    // Load saved background
-    const savedBackground = localStorage.getItem('helios-background');
-    if (savedBackground) {
-        activeBackground = savedBackground;
-        // Update the active button in the settings panel
-        settingOptions.forEach(option => {
-            option.classList.remove('active');
-            if (option.dataset.bg === activeBackground) {
-                option.classList.add('active');
-            }
-        });
-        updateActiveBackground();
-    }
-
-    // Load saved volume
-    const savedVolume = localStorage.getItem('helios-volume');
-    if (savedVolume !== null) {
-        audio.volume = savedVolume;
-        volumeSlider.value = savedVolume;
-    }
-
-    // Load saved shuffle state
-    const savedShuffle = localStorage.getItem('helios-shuffle');
-    if (savedShuffle !== null) {
-        isShuffle = (savedShuffle === 'true'); // Convert string to boolean
-        shuffleBtn.classList.toggle('active', isShuffle);
-    }
-
-    // Load saved repeat state
-    const savedRepeat = localStorage.getItem('helios-repeat');
-    if (savedRepeat !== null) {
-        isRepeat = (savedRepeat === 'true'); // Convert string to boolean
-        repeatBtn.classList.toggle('active', isRepeat);
+/**
+ * Handles what happens when a song finishes playing.
+ */
+function handleSongEnd() {
+    if (isRepeat) {
+        audio.currentTime = 0;
+        playSong();
+    } else {
+        nextSong();
     }
 }
 
-function updateProgress(e) { if (isPlaying && !isNaN(audio.duration)) { const { duration, currentTime } = e.srcElement; const p = (currentTime / duration) * 100; progress.style.width = `${p}%`; const f = t => String(Math.floor(t)).padStart(2, '0'); const dM = Math.floor(duration / 60); const dS = f(duration % 60); durationEl.textContent = `${dM}:${dS}`; const cM = Math.floor(currentTime / 60); const cS = f(currentTime % 60); currentTimeEl.textContent = `${cM}:${cS}`; } }
-function setProgress(e) { const w = this.clientWidth; const cX = e.offsetX; const { duration } = audio; audio.currentTime = (cX / w) * duration; }
+
+// ==========================================================================
+// D. UI & CONTROL FUNCTIONS
+// ==========================================================================
+
+/**
+ * Updates the progress bar and time display as the song plays.
+ * @param {Event} e The timeupdate event object.
+ */
+function updateProgress(e) {
+    if (isPlaying && !isNaN(audio.duration)) {
+        const { duration, currentTime } = e.srcElement;
+        const progressPercent = (currentTime / duration) * 100;
+        progress.style.width = `${progressPercent}%`;
+
+        const formatTime = (time) => String(Math.floor(time)).padStart(2, '0');
+        
+        const durationMinutes = Math.floor(duration / 60);
+        const durationSeconds = formatTime(duration % 60);
+        durationEl.textContent = `${durationMinutes}:${durationSeconds}`;
+
+        const currentMinutes = Math.floor(currentTime / 60);
+        const currentSeconds = formatTime(currentTime % 60);
+        currentTimeEl.textContent = `${currentMinutes}:${currentSeconds}`;
+    }
+}
+
+/**
+ * Seeks to a specific point in the song when the progress bar is clicked.
+ * @param {Event} e The click event object.
+ */
+function setProgress(e) {
+    const width = this.clientWidth;
+    const clickX = e.offsetX;
+    const { duration } = audio;
+    audio.currentTime = (clickX / width) * duration;
+}
+
+/**
+ * Sets the audio volume and saves it to localStorage.
+ */
 function setVolume() {
     audio.volume = volumeSlider.value;
     localStorage.setItem('helios-volume', volumeSlider.value);
 }
 
+/**
+ * Toggles the shuffle state and saves it to localStorage.
+ */
+function toggleShuffle() {
+    isShuffle = !isShuffle;
+    shuffleBtn.classList.toggle('active', isShuffle);
+    localStorage.setItem('helios-shuffle', isShuffle);
+}
+
+/**
+ * Toggles the repeat state and saves it to localStorage.
+ */
+function toggleRepeat() {
+    isRepeat = !isRepeat;
+    repeatBtn.classList.toggle('active', isRepeat);
+    localStorage.setItem('helios-repeat', isRepeat);
+}
+
+/**
+ * Populates the playlist panel with songs.
+ */
 function generatePlaylist() {
     playlistEl.innerHTML = '';
     playlists.forEach(p => {
@@ -246,13 +354,13 @@ function generatePlaylist() {
         const summary = document.createElement('summary');
         summary.textContent = p.name;
         details.appendChild(summary);
+
         const ul = document.createElement('ul');
         p.songs.forEach(song => {
             const li = document.createElement('li');
             const idx = allSongs.findIndex(s => s.name === song.name);
             li.dataset.index = idx;
 
-            // This is the new part that adds the image and structured text
             li.innerHTML = `
                 <img src="Assets/images/${song.cover}.jpg" alt="${song.displayName}" class="playlist-item-cover">
                 <div class="playlist-item-details">
@@ -260,7 +368,6 @@ function generatePlaylist() {
                     <span>${song.artist}</span>
                 </div>
             `;
-
             li.addEventListener('click', () => {
                 currentPlaylist = p;
                 songIndex = idx;
@@ -275,11 +382,53 @@ function generatePlaylist() {
     highlightCurrentSong();
 }
 
+/**
+ * Visually highlights the currently playing song in the playlist.
+ */
+function highlightCurrentSong() {
+    document.querySelectorAll('#playlist li').forEach(i => i.classList.remove('playing'));
+    document.querySelectorAll('#playlist summary').forEach(i => i.classList.remove('active'));
+
+    const item = document.querySelector(`#playlist li[data-index='${songIndex}']`);
+    if (item) {
+        item.classList.add('playing');
+        const group = item.closest('.playlist-group');
+        if (group) {
+            group.querySelector('summary').classList.add('active');
+            if (!group.open) group.open = true;
+        }
+    }
+}
+
+/**
+ * Finds which of the original playlists a globally indexed song belongs to.
+ * @param {number} gIndex The global index of the song in `allSongs`.
+ * @returns {object|null} The playlist object or null if not found.
+ */
+function findPlaylistForSong(gIndex) {
+    for (const p of playlists) {
+        const exists = p.songs.find(s => allSongs[gIndex] && s.name === allSongs[gIndex].name);
+        if (exists) return p;
+    }
+    return null;
+}
+
+/**
+ * Shows search suggestions based on user input.
+ * @param {string} term The search term.
+ */
 function showSearchSuggestions(term) {
     searchSuggestions.innerHTML = '';
-    if (!term.trim()) { searchSuggestions.style.display = 'none'; return; }
-    const filtered = allSongs.filter(s => s.displayName.toLowerCase().includes(term) || s.artist.toLowerCase().includes(term));
+    if (!term.trim()) {
+        searchSuggestions.style.display = 'none';
+        return;
+    }
+    const filtered = allSongs.filter(s => 
+        s.displayName.toLowerCase().includes(term) || 
+        s.artist.toLowerCase().includes(term)
+    );
     searchSuggestions.style.display = filtered.length > 0 ? 'block' : 'none';
+
     filtered.slice(0, 5).forEach(song => {
         const li = document.createElement('li');
         li.innerHTML = `<strong>${song.displayName}</strong><br><span>${song.artist}</span>`;
@@ -295,17 +444,26 @@ function showSearchSuggestions(term) {
     });
 }
 
-function togglePlaylist() { settingsPanel.classList.remove('show'); playlistPanel.classList.toggle('show'); }
-function toggleSettingsPanel() { playlistPanel.classList.remove('show'); settingsPanel.classList.toggle('show'); }
-function toggleShuffle() {
-    isShuffle = !isShuffle;
-    shuffleBtn.classList.toggle('active', isShuffle);
-    // Save the new shuffle state
-    localStorage.setItem('helios-shuffle', isShuffle);
+/**
+ * Toggles the visibility of the playlist and settings panels.
+ */
+function togglePlaylist() {
+    settingsPanel.classList.remove('show');
+    playlistPanel.classList.toggle('show');
 }
-function toggleRepeat() { isRepeat = !isRepeat; repeatBtn.classList.toggle('active', isRepeat); }
-function handleSongEnd() { if (isRepeat) { audio.currentTime = 0; playSong(); } else { nextSong(); } }
+function toggleSettingsPanel() {
+    playlistPanel.classList.remove('show');
+    settingsPanel.classList.toggle('show');
+}
 
+
+// ==========================================================================
+// E. VISUALIZER & BACKGROUND FUNCTIONS
+// ==========================================================================
+
+/**
+ * Sets up and draws the bar-style audio visualizer.
+ */
 function setupPlayerVisualizer() {
     if (!audioContext) {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -317,6 +475,7 @@ function setupPlayerVisualizer() {
     analyser.fftSize = 256;
     const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
+    
     function draw() {
         requestAnimationFrame(draw);
         if (analyser) {
@@ -335,13 +494,20 @@ function setupPlayerVisualizer() {
     draw();
 }
 
+/**
+ * Updates the main page background based on the user's setting.
+ */
 function updateActiveBackground() {
-    albumArtBg.classList.remove('active');
+    // Deactivate all backgrounds first
     auroraBg.classList.remove('active');
     vinylBg.classList.remove('active');
     vortexCanvas.classList.remove('active');
+    albumArtBg1.style.opacity = '0';
+    albumArtBg2.style.opacity = '0';
+
     const colors = colorPresets[songIndex];
     if (!colors) return;
+
     switch (activeBackground) {
         case 'aurora':
             auroraBg.style.setProperty('--aurora1', colors.aurora[0]);
@@ -358,12 +524,26 @@ function updateActiveBackground() {
             break;
         case 'off':
         default:
-            albumArtBg.style.backgroundImage = `url('Assets/images/${allSongs[songIndex].cover}.jpg')`;
-            albumArtBg.classList.add('active');
+            const imageUrl = `url('Assets/images/${allSongs[songIndex].cover}.jpg')`;
+            
+            if (currentBgDiv === 1) {
+                albumArtBg2.style.backgroundImage = imageUrl;
+                albumArtBg1.style.opacity = '0';
+                albumArtBg2.style.opacity = '1';
+                currentBgDiv = 2;
+            } else {
+                albumArtBg1.style.backgroundImage = imageUrl;
+                albumArtBg2.style.opacity = '0';
+                albumArtBg1.style.opacity = '1';
+                currentBgDiv = 1;
+            }
             break;
     }
 }
 
+/**
+ * Initializes the Three.js vortex background.
+ */
 function initVortex() {
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -384,6 +564,7 @@ function initVortex() {
         lines.push(line);
     }
     camera.position.z = -5;
+    
     function animate() {
         requestAnimationFrame(animate);
         if (activeBackground !== 'vortex') return;
@@ -399,39 +580,113 @@ function initVortex() {
     animate();
 }
 
-settingOptions.forEach(option => {
-    option.addEventListener('click', () => {
-        settingOptions.forEach(btn => btn.classList.remove('active'));
-        option.classList.add('active');
-        activeBackground = option.dataset.bg;
 
-        // Save the new background setting
-        localStorage.setItem('helios-background', activeBackground);
+// ==========================================================================
+// F. LOCALSTORAGE & SETTINGS
+// ==========================================================================
 
-        updateActiveBackground();
-        if (activeBackground === 'vortex' && !scene) { initVortex(); }
-    });
+/**
+ * Loads all user preferences from localStorage when the app starts.
+ */
+function loadSettings() {
+    // Load saved background
+    const savedBackground = localStorage.getItem('helios-background');
+    if (savedBackground) {
+        activeBackground = savedBackground;
+        settingOptions.forEach(option => {
+            option.classList.remove('active');
+            if (option.dataset.bg === activeBackground) {
+                option.classList.add('active');
+            }
+        });
+    }
+
+    // Load saved volume
+    const savedVolume = localStorage.getItem('helios-volume');
+    if (savedVolume !== null) {
+        audio.volume = savedVolume;
+        volumeSlider.value = savedVolume;
+    }
+
+    // Load saved shuffle state
+    const savedShuffle = localStorage.getItem('helios-shuffle');
+    if (savedShuffle !== null) {
+        isShuffle = (savedShuffle === 'true');
+        shuffleBtn.classList.toggle('active', isShuffle);
+    }
+
+    // Load saved repeat state
+    const savedRepeat = localStorage.getItem('helios-repeat');
+    if (savedRepeat !== null) {
+        isRepeat = (savedRepeat === 'true');
+        repeatBtn.classList.toggle('active', isRepeat);
+    }
+
+    // Load the last played song's index
+    const savedSongIndex = localStorage.getItem('helios-lastSongIndex');
+    if (savedSongIndex !== null) {
+        songIndex = parseInt(savedSongIndex, 10);
+    }
+}
+
+
+// ==========================================================================
+// G. EVENT LISTENERS
+// ==========================================================================
+// All event listeners are grouped here.
+
+// Player Controls
+playBtn.addEventListener('click', () => {
+    if (!audioContext) { setupPlayerVisualizer(); }
+    isPlaying ? pauseSong() : playSong();
 });
+prevBtn.addEventListener('click', prevSong);
+nextBtn.addEventListener('click', nextSong);
+shuffleBtn.addEventListener('click', toggleShuffle);
+repeatBtn.addEventListener('click', toggleRepeat);
+
+// Audio Events
+audio.addEventListener('ended', handleSongEnd);
+audio.addEventListener('timeupdate', updateProgress);
+audio.addEventListener('loadedmetadata', () => {
+    // Update time display for the newly loaded song
+    updateProgress({ srcElement: { duration: audio.duration, currentTime: 0 } });
+    
+    // Check for and apply a saved playback position
+    const savedPosition = localStorage.getItem('helios-lastPosition');
+    if (savedPosition) {
+        audio.currentTime = parseFloat(savedPosition);
+        localStorage.removeItem('helios-lastPosition');
+    }
+});
+
+// UI Interactions
+progressContainer.addEventListener('click', setProgress);
+volumeSlider.addEventListener('input', setVolume);
+playlistToggle.addEventListener('click', togglePlaylist);
+playlistClose.addEventListener('click', togglePlaylist);
+settingsToggle.addEventListener('click', toggleSettingsPanel);
+settingsClose.addEventListener('click', toggleSettingsPanel);
 searchInput.addEventListener('input', (e) => showSearchSuggestions(e.target.value.toLowerCase()));
 document.addEventListener('click', (e) => {
     if (!document.querySelector('.search-wrapper').contains(e.target)) {
         searchSuggestions.style.display = 'none';
     }
 });
-playBtn.addEventListener('click', () => { if (!audioContext) { setupPlayerVisualizer(); } isPlaying ? pauseSong() : playSong(); });
-settingsToggle.addEventListener('click', toggleSettingsPanel);
-settingsClose.addEventListener('click', toggleSettingsPanel);
-prevBtn.addEventListener('click', prevSong);
-nextBtn.addEventListener('click', nextSong);
-audio.addEventListener('timeupdate', updateProgress);
-audio.addEventListener('loadedmetadata', updateProgress);
-progressContainer.addEventListener('click', setProgress);
-audio.addEventListener('ended', handleSongEnd);
-volumeSlider.addEventListener('input', setVolume);
-playlistToggle.addEventListener('click', togglePlaylist);
-playlistClose.addEventListener('click', togglePlaylist);
-shuffleBtn.addEventListener('click', toggleShuffle);
-repeatBtn.addEventListener('click', toggleRepeat);
+
+// Settings Panel
+settingOptions.forEach(option => {
+    option.addEventListener('click', () => {
+        settingOptions.forEach(btn => btn.classList.remove('active'));
+        option.classList.add('active');
+        activeBackground = option.dataset.bg;
+        localStorage.setItem('helios-background', activeBackground);
+        updateActiveBackground();
+        if (activeBackground === 'vortex' && !scene) { initVortex(); }
+    });
+});
+
+// Window & Browser Events
 window.addEventListener('resize', () => {
     if (renderer) {
         camera.aspect = window.innerWidth / window.innerHeight;
@@ -440,31 +695,28 @@ window.addEventListener('resize', () => {
     }
 });
 
-loadSong(allSongs[songIndex]);
-generatePlaylist();
-updateActiveBackground();
-loadSettings();
+window.addEventListener('beforeunload', () => {
+    // Only save the position if a song is actively playing
+    if (isPlaying) {
+        localStorage.setItem('helios-lastPosition', audio.currentTime);
+    }
+});
 
-// At the bottom of script.js, REPLACE the old event listener with this one
 document.addEventListener('keydown', (event) => {
-    // This line prevents shortcuts from working when you're typing in the search bar
-    if (document.activeElement === searchInput) return;
+    if (document.activeElement === searchInput) return; // Ignore shortcuts when searching
 
     switch (event.key) {
-        case ' ': // Spacebar for Play/Pause
-            event.preventDefault(); // This stops the page from scrolling down
+        case ' ':
+            event.preventDefault();
             playBtn.click();
             break;
-            
-        case 'ArrowRight': // Right Arrow for Next Song
+        case 'ArrowRight':
             nextSong();
             break;
-            
-        case 'ArrowLeft': // Left Arrow for Previous Song
+        case 'ArrowLeft':
             prevSong();
             break;
-            
-        case 'm': // M key for Mute/Unmute
+        case 'm':
         case 'M':
             if (audio.volume > 0) {
                 lastVolume = audio.volume;
@@ -475,21 +727,29 @@ document.addEventListener('keydown', (event) => {
                 volumeSlider.value = lastVolume;
             }
             break;
-
-        case 'ArrowUp': // Up Arrow for Volume Up
+        case 'ArrowUp':
             event.preventDefault();
-            // Increase volume by 5%, but not more than 1 (100%)
             const newVolumeUp = Math.min(1, audio.volume + 0.05);
             audio.volume = newVolumeUp;
             volumeSlider.value = newVolumeUp;
+            setVolume(); // Save the new volume
             break;
-
-        case 'ArrowDown': // Down Arrow for Volume Down
+        case 'ArrowDown':
             event.preventDefault();
-            // Decrease volume by 5%, but not less than 0 (0%)
             const newVolumeDown = Math.max(0, audio.volume - 0.05);
             audio.volume = newVolumeDown;
             volumeSlider.value = newVolumeDown;
+            setVolume(); // Save the new volume
             break;
     }
 });
+
+
+// ==========================================================================
+// H. INITIALIZATION
+// ==========================================================================
+// The code that runs when the script is first loaded.
+
+generatePlaylist();
+loadSettings();
+loadSong(allSongs[songIndex]);
