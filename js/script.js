@@ -717,7 +717,7 @@ playBtn.addEventListener('click', () => {
     isPlaying ? pauseSong() : playSong();
 });
 prevBtn.addEventListener('click', prevSong);
-nextBtn.addEventListener('click', nextBtn);
+nextBtn.addEventListener('click', nextSong);
 shuffleBtn.addEventListener('click', toggleShuffle);
 repeatBtn.addEventListener('click', toggleRepeat);
 likeBtn.addEventListener('click', () => {
