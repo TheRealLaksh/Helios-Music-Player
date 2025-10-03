@@ -17,7 +17,7 @@ This player is fully equipped with all the essential features for a seamless lis
 
 ---
 
-### 🎨 Unique & Creative Enhancements
+### 🎨 Unique & Creative Enhancements 
 
 What makes Helios special is the ability to customize your visual experience.
 
