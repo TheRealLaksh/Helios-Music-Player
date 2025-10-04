@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Allow: /index.html
+Allow: /player.html
+Disallow: /css/
+Disallow: /js/
+Disallow: /Assets/
+Sitemap: https://music.lakshp.live/sitemap.xml
