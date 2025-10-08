@@ -7,8 +7,7 @@
     <title>Helios Music Player | Laksh Pradhwani</title>
     <link rel="icon" type="image/jpeg" href="Assets/images/favicon.jpg">
     <link rel="stylesheet" href="css/style.css">
-<!-- SEO Meta Tags -->
-    <title>Helios Music Player | Laksh Pradhwani</title>
+<title>Helios Music Player | Laksh Pradhwani</title>
     <meta name="description" content="Helios Music Player, a futuristic and immersive music experience designed by Laksh Pradhwani. Listen to music with stunning visuals and customizable backgrounds.">
     <meta name="keywords" content="Helios Music Player, Laksh Music, Music Player by Laksh, Laksh Pradhwani, web music player, visualizer, javascript project">
     <meta name="author" content="Laksh Pradhwani">
@@ -21,12 +20,20 @@
     <div id="album-art-bg-1" class="album-art-bg background-container active"></div>
     <div id="album-art-bg-2" class="album-art-bg background-container"></div>
     <div id="aurora-bg" class="background-container"></div>
-    <div id="vinyl-bg" class="background-container"></div>
+    <div id="vinyl-bg" class="background-container">
+        </div>
     <canvas id="vortex-canvas" class="background-container"></canvas>
 
     <div class="site-wrapper">
 
         <div class="left-sidebar">
+            <div class="top-sidebar-actions"> 
+                <a href="index.html" id="home-button">
+                    <i class="ph ph-house"></i>
+                    <span>Home</span>
+                </a>
+            </div>
+            
             <div class="search-wrapper">
                 <div class="search-container">
                     <i class="ph ph-magnifying-glass"></i>
@@ -35,7 +42,8 @@
                 </div>
                 <ul id="search-suggestions"></ul>
             </div>
-            <a href="index.html" id="home-button">
+            
+            <a href="index.html" id="home-button-mobile" class="mobile-only-home">
                 <i class="ph ph-house"></i>
                 <span>Home</span>
             </a>
@@ -65,7 +73,8 @@
                 <audio id="audio" src=""></audio>
 
                 <div class="progress-container" id="progress-container">
-                    <div class="progress" id="progress"></div>
+                    <div class="progress" id="progress">
+                        <div class="progress-handle"></div> </div>
                     <div class="duration-wrapper">
                         <span id="current-time">0:00</span>
                         <span id="duration">0:00</span>
@@ -84,9 +93,9 @@
                 <canvas id="visualizer"></canvas>
 
                 <div class="volume-container">
-                    <i class="ph ph-speaker-simple-low"></i>
+                    <i class="ph ph-speaker-simple-low" id="volume-icon-low"></i>
                     <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1">
-                    <i class="ph ph-speaker-simple-high"></i>
+                    <i class="ph ph-speaker-simple-high" id="volume-icon-high"></i>
                 </div>
             </main>
         </div>
@@ -105,10 +114,22 @@
                 <button class="action-btn" id="settings-close"><i class="ph ph-x"></i></button>
             </div>
             <div class="settings-options">
-                <button class="setting-option" data-bg="aurora">Aurora</button>
-                <button class="setting-option" data-bg="vinyl">Vinyl</button>
-                <button class="setting-option" data-bg="vortex">Vortex</button>
-                <button class="setting-option active" data-bg="off">Off (Album Art)</button>
+                <button class="setting-option" data-bg="aurora">
+                    Aurora
+                    <div class="setting-preview" style="background: linear-gradient(45deg, #FF6F61, #6B5B95);"></div>
+                </button>
+                <button class="setting-option" data-bg="vinyl">
+                    Vinyl
+                    <div class="setting-preview setting-preview-vinyl"></div>
+                </button>
+                <button class="setting-option" data-bg="vortex">
+                    Vortex
+                    <div class="setting-preview setting-preview-vortex"></div>
+                </button>
+                <button class="setting-option active" data-bg="off">
+                    Off (Album Art)
+                    <div class="setting-preview setting-preview-off"></div>
+                </button>
             </div>
         </aside>
 
