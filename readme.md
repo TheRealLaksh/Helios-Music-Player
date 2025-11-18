@@ -1,76 +1,150 @@
-# 🚀 Helios Music Player 🎵
+<!-- ===================================================================== -->
+<!--                         LAKSH PRADHWANI — HELIOS                       -->
+<!-- ===================================================================== -->
 
-Welcome to Helios, a futuristic and highly customizable web-based music player. Built with a focus on a clean user experience and stunning visuals, this project goes beyond the standard player by offering multiple dynamic, animated backgrounds that react to your music.
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=111111&height=170&text=Helios%20Music%20Player&fontSize=40&fontColor=FFFFFF&fontAlignY=35" />
+</p>
 
----
+<br>
 
-### ✨ Core Features
+<p align="center">
+  <img src="https://img.shields.io/badge/Status-Stable-00C853?style=for-the-badge" />
+  <img src="https://img.shields.io/github/languages/top/TheRealLaksh/Music-Player?style=for-the-badge&color=2962FF" />
+  <img src="https://img.shields.io/github/last-commit/TheRealLaksh/Music-Player?style=for-the-badge&color=FFD600" />
+</p>
 
-This player is fully equipped with all the essential features for a seamless listening experience.
+<br>
 
--   ✅ **Full Playback Controls**: Play, pause, skip forward, and go back with ease.
--   ✅ **Interactive Progress Bar**: See the current timestamp and track duration. Click anywhere on the progress bar to seek to that position in the song.
--   ✅ **Volume Control**: Adjust the audio level with a smooth, intuitive slider.
--   ✅ **Shuffle & Repeat**: Enjoy your playlist in a random order with shuffle, or loop your favorite track with repeat.
--   ✅ **Dynamic Playlist Panel**: A clean, slide-out panel displays all available tracks.
--   ✅ **Responsive Design**: The interface is meticulously crafted to look and feel great on any device, from a large desktop monitor to a small mobile screen.
+<!-- ===================================================================== -->
+<!--                           PROJECT OVERVIEW                             -->
+<!-- ===================================================================== -->
 
----
+<div align="center">
+<table><tr><td>
 
-### 🎨 Unique & Creative Enhancements 
+### 🎧 Helios — A Clean & Modern Music Player  
+A minimal, fast, fully interactive **JavaScript-powered audio player** focused on smooth UI, responsive controls, and polished animations.  
+Designed with a sleek dark theme, soft neon highlights, and fluid transitions for a modern listening experience.
 
-What makes Helios special is the ability to customize your visual experience.
+</td></tr></table>
+</div>
 
--   **🎛️ In-Player Audio Visualizer**: A sleek, real-time audio visualizer is built directly into the player UI, providing a beat-reactive graphical element.
--   **🌌 Customizable Animated Backgrounds**: A dedicated settings panel allows you to switch between four distinct background modes, each with its own unique, song-aware color palette:
-    -   **🖼️ Album Art (Default)**: A beautifully blurred and scaled version of the current song's cover art.
-    -   **🌠 Aurora**: A smooth, flowing gradient that resembles the northern lights, with colors that change for each song.
-    -   **💿 Vinyl**: A minimalist, rotating geometric pattern that syncs its motion with the play/pause state, just like a real record player.
-    -   **🚀 Vortex**: An immersive 3D data tunnel (powered by Three.js) that pulses with the music and adopts a new color scheme for every track.
-
----
-
-### 🎶 Current Playlist
-
-For this version, the player is loaded with a static playlist of 5 diverse tracks to demonstrate its functionality. The `assets` folder can be easily updated with your own music.
-
-1.  **Youngblood** - 5 Seconds of Summer
-2.  **God's Plan** - Drake
-3.  **Don't Even Text** - Tsumyoki, Ginni
-4.  **Darji** - Prabh Singh, Rooh Sandhu
-5.  **Paro** - Aditya Rikhari
+<br>
 
 ---
 
-### 🛠️ Tech Stack
+# 🌟 Features
 
-This project was built from the ground up using fundamental web technologies, showcasing a strong command of front-end development.
+<div align="center">
+<table>
+<tr>
+<td width="33%">
 
--   **HTML5**: Structuring the application with semantic and accessible markup.
--   **CSS3**: Advanced styling for the dark theme, responsive layout, and complex `@keyframes` animations.
--   **JavaScript (ES6+)**: Handling all application logic, including audio API interaction, state management, and DOM manipulation.
--   **Three.js**: A powerful 3D library used to render the high-performance "Vortex" background.
--   **Phosphor Icons**: For the clean, modern, and highly legible icon set.
+### 🎨 Design  
+- Minimal dark UI  
+- Neon accents  
+- Glass-like panels  
+- Smooth transitions  
+- Responsive layout  
+
+</td>
+
+<td width="33%">
+
+### 🎵 Music Engine  
+- Custom audio controls  
+- Play / pause / next / prev  
+- Seekbar with animation  
+- Volume slider  
+- Auto-update song details  
+
+</td>
+
+<td width="33%">
+
+### ⚡ Interactivity  
+- Hover animations  
+- Dynamic song switching  
+- Real-time state updates  
+- Keyboard-friendly controls  
+- Mobile-responsive  
+
+</td>
+</tr>
+</table>
+</div>
+
+<br>
 
 ---
 
-### 🚀 Local Setup and Usage
+# 🎼 Song Card System
 
-To run this project on your local machine, you **must use a local server**. Opening the `index.html` file directly will cause browser security (CORS) errors, which will prevent the audio and visualizer from loading correctly.
+Each track is rendered as a **clean, glowing card** with:
 
-The easiest method is with the **Live Server** extension in Visual Studio Code.
+- Song thumbnail  
+- Title + artist  
+- Animated hover elevation  
+- Fast track switching  
+- Smooth metadata updates  
 
-1.  **Clone the Repository**
-    ```bash
-    git clone [https://github.com/your-username/helios-music-player.git](https://github.com/your-username/helios-music-player.git)
-    ```
-2.  **Navigate to the Directory**
-    ```bash
-    cd helios-music-player
-    ```
-3.  **Ensure Assets Are in Place**
-    -   Your music files (`.mp3`) must be in the `/assets/music/` folder.
-    -   Your cover images (`.jpg`, `.png`, etc.) must be in the `/assets/images/` folder.
-4.  **Launch the Server**
-    -   In VS Code, right-click the `index.html` file.
-    -   Select **"Open with Live Server"**. Your browser will automatically open the project, and everything will be fully functional.
+The player transitions instantly without refresh or delay.
+
+<br>
+
+---
+
+# 🧩 Architecture
+
+```
+Music-Player/
+│── index.html        -> UI layout + audio structure
+│── style.css         -> Theme, layout, animations
+│── script.js         -> Logic for controls, events, updates
+│── assets/
+│    ├── songs/       -> Audio files
+│    ├── images/      -> Thumbnails / cover art
+│    └── icons/       -> Control icons
+```
+
+<br>
+
+---
+
+# 🛠️ Tech Stack
+
+<div align="center">
+<img src="https://skillicons.dev/icons?i=html,css,js&theme=dark" />
+</div>
+
+<br>
+
+---
+
+# 🔧 Installation
+
+```bash
+git clone https://github.com/TheRealLaksh/Music-Player
+cd Music-Player
+# Open index.html in your browser
+```
+
+<br>
+
+---
+
+# 🔗 Connect
+
+<div align="center">
+<a href="mailto:laksh.pradhwani@gmail.com"><img src="https://img.shields.io/badge/Email-Contact-FF5252?style=for-the-badge&logo=gmail"></a>
+<a href="https://github.com/TheRealLaksh"><img src="https://img.shields.io/badge/GitHub-TheRealLaksh-24292F?style=for-the-badge&logo=github"></a>
+<a href="https://www.linkedin.com/in/laksh-pradhwani"><img src="https://img.shields.io/badge/LinkedIn-Laksh%20Pradhwani-0A66C2?style=for-the-badge&logo=linkedin"></a>
+</div>
+
+<br>
+
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=wave&color=111111&height=130&section=footer&fontColor=FFFFFF&text=Enjoy%20the%20Music!" />
+</p>
+
