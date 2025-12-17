@@ -10,8 +10,8 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/Status-Stable-00C853?style=for-the-badge" />
-  <img src="https://img.shields.io/github/languages/top/TheRealLaksh/Music-Player?style=for-the-badge&color=2962FF" />
-  <img src="https://img.shields.io/github/last-commit/TheRealLaksh/Music-Player?style=for-the-badge&color=FFD600" />
+  <img src="https://img.shields.io/github/languages/top/TheRealLaksh/Helios-Music-Player?style=for-the-badge&color=2962FF" />
+  <img src="https://img.shields.io/github/last-commit/TheRealLaksh/Helios-Music-Player?style=for-the-badge&color=FFD600" />
 </p>
 
 <br>
@@ -98,7 +98,7 @@ The player transitions instantly without refresh or delay.
 # 🧩 Architecture
 
 ```
-Music-Player/
+Helios-Music-Player/
 │── index.html        -> UI layout + audio structure
 │── style.css         -> Theme, layout, animations
 │── script.js         -> Logic for controls, events, updates
@@ -125,8 +125,8 @@ Music-Player/
 # 🔧 Installation
 
 ```bash
-git clone https://github.com/TheRealLaksh/Music-Player
-cd Music-Player
+git clone https://github.com/TheRealLaksh/Helios-Music-Player
+cd Helios-Music-Player
 # Open index.html in your browser
 ```
 
