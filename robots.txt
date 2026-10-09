@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://music.lakshp.live/sitemap.xml
+Sitemap: https://music.lakshpradhwani.com/sitemap.xml
