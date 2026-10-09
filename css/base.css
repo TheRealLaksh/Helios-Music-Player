@@ -1,0 +1,157 @@
+/* ==========================================================================
+   Helios — design tokens, fonts, reset, shared primitives
+   ========================================================================== */
+
+@font-face {
+    font-family: 'Inter';
+    src: url('../Assets/fonts/inter-var.woff2') format('woff2');
+    font-weight: 400 700;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Instrument Serif';
+    src: url('../Assets/fonts/instrument-serif.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Instrument Serif';
+    src: url('../Assets/fonts/instrument-serif-italic.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+:root {
+    /* Ink (surfaces) */
+    --ink-0: #07060a;
+    --ink-1: #0e0c13;
+    --ink-2: #15131d;
+    --ink-3: #1e1b28;
+    --ink-4: #2a2636;
+
+    /* Text */
+    --text: #f7f1e8;
+    --text-2: rgb(247 241 232 / 0.68);
+    --text-3: rgb(247 241 232 / 0.46);
+
+    /* Lines */
+    --line: rgb(255 255 255 / 0.08);
+    --line-strong: rgb(255 255 255 / 0.16);
+
+    /* Brand sun */
+    --sun-gold: #ffd36b;
+    --sun-coral: #ff4f6d;
+    --sun-gradient: linear-gradient(135deg, var(--sun-gold), var(--sun-coral));
+
+    /* Adaptive accent — overwritten at runtime from the current cover */
+    --accent-rgb: 255 179 71;
+    --accent-2-rgb: 255 79 109;
+    --accent: rgb(var(--accent-rgb));
+    --accent-2: rgb(var(--accent-2-rgb));
+    --on-accent: #120d05;
+
+    /* Type */
+    --font-ui: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-display: 'Instrument Serif', 'Iowan Old Style', Georgia, serif;
+
+    /* Shape & motion */
+    --r-sm: 10px;
+    --r-md: 16px;
+    --r-lg: 24px;
+    --r-xl: 32px;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+body {
+    background: var(--ink-0);
+    color: var(--text);
+    font-family: var(--font-ui);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'cv11', 'ss03';
+}
+
+[hidden] { display: none !important; }
+img, svg, canvas { display: block; max-width: 100%; }
+button, input, select { font: inherit; color: inherit; }
+button { background: none; border: 0; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+ul, ol { list-style: none; }
+
+.sr-only {
+    position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 6px;
+}
+
+::selection { background: rgb(var(--accent-rgb) / 0.35); }
+
+/* Icons (inline SVG sprite) */
+.i {
+    width: 1.25em; height: 1.25em; flex: none;
+    fill: none; stroke: currentColor; stroke-width: 2;
+    stroke-linecap: round; stroke-linejoin: round;
+}
+.i-fill { fill: currentColor; stroke: none; }
+
+/* Buttons */
+.btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.6em;
+    height: 52px; padding: 0 28px; border-radius: 999px;
+    font-weight: 600; font-size: 15px; letter-spacing: -0.005em;
+    transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), background 0.3s, border-color 0.3s;
+    white-space: nowrap;
+}
+.btn:active { transform: scale(0.97); }
+.btn-sun {
+    background: var(--sun-gradient); color: #1a0d08;
+    box-shadow: 0 10px 40px -8px rgb(255 99 90 / 0.55), inset 0 1px 0 rgb(255 255 255 / 0.5);
+}
+.btn-sun:hover { transform: translateY(-2px); box-shadow: 0 16px 50px -8px rgb(255 99 90 / 0.7), inset 0 1px 0 rgb(255 255 255 / 0.5); }
+.btn-ghost {
+    border: 1px solid var(--line-strong); background: rgb(255 255 255 / 0.04);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+}
+.btn-ghost:hover { background: rgb(255 255 255 / 0.1); border-color: rgb(255 255 255 / 0.3); transform: translateY(-2px); }
+
+kbd {
+    display: inline-grid; place-items: center; min-width: 24px; height: 24px; padding: 0 7px;
+    font: 600 11px/1 var(--font-ui); color: var(--text-2);
+    background: var(--ink-3); border: 1px solid var(--line-strong); border-bottom-width: 2px;
+    border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+}
