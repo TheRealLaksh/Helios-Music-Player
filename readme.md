@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="https://music.lakshp.live"><b>Live demo</b></a> ·
+  <a href="https://music.lakshpradhwani.com"><b>Live demo</b></a> ·
   <a href="#features">Features</a> ·
   <a href="#keyboard-shortcuts">Shortcuts</a> ·
   <a href="#run-it-locally">Run it</a> ·
