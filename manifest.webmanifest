@@ -1,0 +1,18 @@
+{
+    "name": "Helios Music Player",
+    "short_name": "Helios",
+    "description": "An immersive web music player with adaptive colour, living ambiences and a real waveform seekbar.",
+    "start_url": "player.html",
+    "scope": "./",
+    "display": "standalone",
+    "orientation": "any",
+    "background_color": "#07060a",
+    "theme_color": "#07060a",
+    "categories": ["music", "entertainment"],
+    "icons": [
+        { "src": "Assets/brand/icon-192.png", "sizes": "192x192", "type": "image/png" },
+        { "src": "Assets/brand/icon-512.png", "sizes": "512x512", "type": "image/png" },
+        { "src": "Assets/brand/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+        { "src": "Assets/brand/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+    ]
+}

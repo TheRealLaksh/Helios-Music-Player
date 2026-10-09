@@ -2,31 +2,233 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Helios | Laksh Pradhwani</title>
-    <link rel="icon" type="image/jpeg" href="Assets/images/favicon.jpg">
-    <link rel="stylesheet" href="css/landing.css">
-    <!-- SEO Meta Tags -->
-    <title>Helios Music Player | Laksh Pradhwani</title>
-    <meta name="description" content="Helios Music Player, a futuristic and immersive music experience designed by Laksh Pradhwani. Listen to music with stunning visuals and customizable backgrounds.">
-    <meta name="keywords" content="Helios Music Player, Laksh Music, Music Player by Laksh, Laksh Pradhwani, web music player, visualizer, javascript project">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Helios — Music, in full light</title>
+    <meta name="description" content="Helios is an immersive web music player by Laksh Pradhwani. Adaptive colour that follows the cover art, four living ambiences, a real waveform seekbar, EQ, queue and a keyboard-first workflow.">
+    <meta name="keywords" content="Helios, Helios Music Player, Laksh Pradhwani, web music player, audio visualizer, javascript music player, waveform, equalizer">
     <meta name="author" content="Laksh Pradhwani">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <meta name="theme-color" content="#07060a">
+    <link rel="canonical" href="https://music.lakshp.live/">
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Helios">
+    <meta property="og:title" content="Helios — Music, in full light">
+    <meta property="og:description" content="An immersive web music player. Adaptive colour, living ambiences, real waveform seekbar, EQ and a keyboard-first workflow.">
+    <meta property="og:url" content="https://music.lakshp.live/">
+    <meta property="og:image" content="https://music.lakshp.live/Assets/brand/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Helios — Music, in full light">
+    <meta name="twitter:description" content="An immersive web music player by Laksh Pradhwani.">
+    <meta name="twitter:image" content="https://music.lakshp.live/Assets/brand/og-image.png">
+
+    <link rel="icon" type="image/svg+xml" href="Assets/brand/favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="Assets/brand/favicon-32.png">
+    <link rel="apple-touch-icon" href="Assets/brand/apple-touch-icon.png">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="preload" href="Assets/fonts/instrument-serif.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="Assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/landing.css">
+    <script>document.documentElement.classList.add('js')</script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Helios Music Player",
+        "url": "https://music.lakshp.live/",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "Any (modern browser)",
+        "author": { "@type": "Person", "name": "Laksh Pradhwani" },
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }
+    </script>
 </head>
-<body>
+<body class="landing">
 
-    <canvas id="scene-container"></canvas>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+        <symbol id="i-play" viewBox="0 0 24 24"><path class="i-fill" d="M7 4.6v14.8a1 1 0 0 0 1.5.86l12.2-7.4a1 1 0 0 0 0-1.72L8.5 3.74A1 1 0 0 0 7 4.6Z"/></symbol>
+        <symbol id="i-pause" viewBox="0 0 24 24"><rect class="i-fill" x="5.5" y="4" width="4.5" height="16" rx="1.4"/><rect class="i-fill" x="14" y="4" width="4.5" height="16" rx="1.4"/></symbol>
+        <symbol id="i-github" viewBox="0 0 24 24"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></symbol>
+        <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6ZM2 9h4v12H2zM4 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/></symbol>
+        <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m22 7-10 6L2 7"/></symbol>
+    </svg>
 
-    <div class="hero-content">
-        <h1 class="logo">Helios</h1>
-        <p class="tagline">An immersive soundscape music player, crafted for the modern listener. Experience music like never before.</p>
-        <a href="player.html" class="cta-button">Enter the Experience</a>
-    </div>
+    <canvas id="sun" aria-hidden="true"></canvas>
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="nav" id="nav">
+        <a href="index.html" class="brand" aria-label="Helios home">
+            <img src="Assets/brand/helios-logo.svg" alt="Helios" height="34">
+        </a>
+        <nav class="nav-links" aria-label="Primary">
+            <a href="#features">Features</a>
+            <a href="#try">Try it</a>
+            <a href="#library">Library</a>
+        </nav>
+        <a href="player.html" class="btn btn-sun nav-cta" data-enter>Open player</a>
+    </header>
+
+    <main>
+        <!-- ============================ HERO ============================ -->
+        <section class="hero" id="top">
+            <div class="hero-copy">
+                <p class="eyebrow reveal"><span class="live-dot"></span><span><b data-stat="tracks">71</b> tracks&nbsp;·&nbsp;<b data-stat="langs">3</b> languages&nbsp;·&nbsp;zero ads</span></p>
+                <h1 class="reveal" style="--d:.08s">Music, in<br><em>full light.</em></h1>
+                <p class="lede reveal" style="--d:.16s">Helios is a web player that <strong>listens back</strong>. The interface takes the colour of every cover, the room breathes with the beat, and everything is one keystroke away.</p>
+                <div class="cta-row reveal" style="--d:.24s">
+                    <a href="player.html" class="btn btn-sun" data-enter>Start listening <svg class="i"><use href="#i-arrow"/></svg></a>
+                    <a href="#try" class="btn btn-ghost">Try a track here</a>
+                </div>
+                <ul class="hint-row reveal" style="--d:.32s" aria-label="Keyboard shortcuts">
+                    <li><kbd>Space</kbd> play</li>
+                    <li><kbd>Ctrl</kbd><kbd>K</kbd> search</li>
+                    <li><kbd>Q</kbd> queue</li>
+                    <li><kbd>?</kbd> all shortcuts</li>
+                </ul>
+            </div>
+
+            <div class="hero-stage" aria-hidden="true">
+                <div class="wall" id="wall"></div>
+                <div class="float-card" id="float-card">
+                    <img id="fc-cover" alt="" width="52" height="52">
+                    <div class="fc-meta"><b id="fc-title">—</b><span id="fc-artist">—</span></div>
+                    <div class="eq"><i></i><i></i><i></i><i></i></div>
+                </div>
+            </div>
+
+            <a href="#features" class="scroll-cue" aria-label="Scroll to features"><span></span></a>
+        </section>
+
+        <!-- =========================== MARQUEE =========================== -->
+        <section class="marquee" aria-label="Artists in the library">
+            <div class="marquee-track" id="marquee"></div>
+        </section>
+
+        <!-- =========================== FEATURES ========================== -->
+        <section class="section" id="features">
+            <header class="section-head reveal">
+                <p class="kicker">What makes it different</p>
+                <h2>A player that feels<br>like a <em>place.</em></h2>
+            </header>
+
+            <div class="bento">
+                <article class="card card-lg reveal" data-card="color">
+                    <div class="card-body">
+                        <h3>The UI wears the cover.</h3>
+                        <p>Every track carries its own palette. Buttons, glows, the waveform and the room light all re-tint as the song changes — no two moments look alike.</p>
+                    </div>
+                    <div class="swatches" id="swatches" aria-hidden="true"></div>
+                </article>
+
+                <article class="card reveal" style="--d:.06s" data-card="wave">
+                    <div class="card-body">
+                        <h3>A seekbar you can read.</h3>
+                        <p>The scrubber is the real waveform of the song. Find the drop by sight.</p>
+                    </div>
+                    <svg class="mini-wave" id="mini-wave" viewBox="0 0 200 48" preserveAspectRatio="none" aria-hidden="true"></svg>
+                </article>
+
+                <article class="card reveal" style="--d:.12s" data-card="ambience">
+                    <div class="card-body">
+                        <h3>Four ambiences.</h3>
+                        <p>Art glow, Aurora, Vinyl and Vortex — each reacting to the music.</p>
+                    </div>
+                    <div class="amb-row" aria-hidden="true">
+                        <span class="amb amb-art"></span><span class="amb amb-aurora"></span><span class="amb amb-vinyl"></span><span class="amb amb-vortex"></span>
+                    </div>
+                </article>
+
+                <article class="card reveal" style="--d:.06s" data-card="eq">
+                    <div class="card-body">
+                        <h3>Studio controls.</h3>
+                        <p>3-band EQ with presets, playback speed and a sleep timer that fades out gently.</p>
+                    </div>
+                    <div class="knobs" aria-hidden="true"><i style="--v:.8"></i><i style="--v:.45"></i><i style="--v:.65"></i></div>
+                </article>
+
+                <article class="card reveal" style="--d:.18s" data-card="resume">
+                    <div class="card-body">
+                        <h3>Picks up where you left.</h3>
+                        <p>Track, position, volume, EQ, ambience and likes are remembered on your device.</p>
+                    </div>
+                    <div class="resume" aria-hidden="true"><span class="ring"></span><div><b>Hawayein</b><span>Resume at 2:14</span></div></div>
+                </article>
+
+                <article class="card card-wide reveal" style="--d:.12s" data-card="keys">
+                    <div class="card-body">
+                        <h3>Keyboard-first. Mouse-friendly. Touch-native.</h3>
+                        <p>Command palette, media keys, lock-screen controls, drag-to-reorder queue and swipe gestures on mobile.</p>
+                    </div>
+                    <div class="keys" aria-hidden="true">
+                        <kbd>Space</kbd><kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>S</kbd><kbd>R</kbd><kbd>L</kbd><kbd>Q</kbd><kbd>F</kbd><kbd>Ctrl</kbd><kbd>K</kbd>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- ============================ TRY IT ============================ -->
+        <section class="section try" id="try">
+            <header class="section-head reveal">
+                <p class="kicker">Live demo</p>
+                <h2>Press play.<br><em>Right here.</em></h2>
+            </header>
+
+            <div class="demo reveal">
+                <div class="demo-main">
+                    <div class="demo-art"><img id="demo-cover" alt="" width="360" height="360"><span class="demo-glow" id="demo-glow"></span></div>
+                    <div class="demo-info">
+                        <p class="kicker" id="demo-lang">English</p>
+                        <h3 id="demo-title">—</h3>
+                        <p id="demo-artist" class="demo-artist">—</p>
+                        <div class="demo-bar" id="demo-bar" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="demo-fill"></i></div>
+                        <div class="demo-times"><span id="demo-cur">0:00</span><span id="demo-dur">0:00</span></div>
+                        <div class="demo-ctrl">
+                            <button class="round" id="demo-prev" aria-label="Previous"><svg class="i flip"><use href="#i-arrow"/></svg></button>
+                            <button class="round round-big" id="demo-play" aria-label="Play"><svg class="i i-fill" id="demo-play-icon"><use href="#i-play"/></svg></button>
+                            <button class="round" id="demo-next" aria-label="Next"><svg class="i"><use href="#i-arrow"/></svg></button>
+                        </div>
+                        <canvas id="demo-viz" width="640" height="96" aria-hidden="true"></canvas>
+                    </div>
+                </div>
+                <div class="demo-picks" id="demo-picks" role="listbox" aria-label="Pick a track"></div>
+            </div>
+        </section>
+
+        <!-- ============================ LIBRARY ============================ -->
+        <section class="section" id="library">
+            <header class="section-head reveal">
+                <p class="kicker">The library</p>
+                <h2>Three moods.<br><em>One sun.</em></h2>
+            </header>
+            <div class="lib-grid" id="lib-grid"></div>
+        </section>
+
+        <!-- ============================== CTA ============================== -->
+        <section class="final">
+            <img class="final-mark reveal" src="Assets/brand/helios-mark.svg" alt="" width="96" height="96">
+            <h2 class="reveal" style="--d:.06s">Let the room<br><em>fill with light.</em></h2>
+            <a href="player.html" class="btn btn-sun reveal" style="--d:.12s" data-enter>Enter Helios <svg class="i"><use href="#i-arrow"/></svg></a>
+        </section>
+    </main>
 
     <footer class="footer">
-        &copy; 2025 Laksh Pradhwani. All Rights Reserved.
+        <div class="footer-inner">
+            <img src="Assets/brand/helios-logo.svg" alt="Helios" height="28">
+            <p>Designed &amp; built by <a href="https://github.com/TheRealLaksh" rel="noopener">Laksh Pradhwani</a>. &copy; <span id="year">2025</span></p>
+            <div class="social">
+                <a href="https://github.com/TheRealLaksh" aria-label="GitHub" rel="noopener"><svg class="i"><use href="#i-github"/></svg></a>
+                <a href="https://www.linkedin.com/in/laksh-pradhwani" aria-label="LinkedIn" rel="noopener"><svg class="i"><use href="#i-linkedin"/></svg></a>
+                <a href="mailto:laksh.pradhwani@gmail.com" aria-label="Email"><svg class="i"><use href="#i-mail"/></svg></a>
+            </div>
+        </div>
     </footer>
 
-    <script src="js/landing.js" defer></script>
+    <script src="js/data.js"></script>
+    <script src="js/landing.js"></script>
 </body>
 </html>
