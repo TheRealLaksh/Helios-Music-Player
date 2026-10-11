@@ -50,7 +50,7 @@
     var artA = document.getElementById('amb-art-a'), artB = document.getElementById('amb-art-b');
     var vinylLabel = document.getElementById('vinyl-label'), vinylSvg = document.getElementById('vinyl-svg');
     var canvas = document.getElementById('amb-vortex'), cx = canvas.getContext('2d');
-    var mode = store.get('ambience', 'art'), useA = true, W = 0, Hh = 0, phase = 0, spinning = false, lastSong = null;
+    var mode = store.get('ambience', 'vinyl'), useA = true, W = 0, Hh = 0, phase = 0, spinning = false, lastSong = null;
 
     function resize() {
         var dpr = Math.min(1.5, window.devicePixelRatio || 1);
